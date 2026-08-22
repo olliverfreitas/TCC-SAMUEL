@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Dúvidas</h1>
+
+    <% if (erro) { %>
+        <p class="erros" role="alert"><%= erro %></p>
+    <% } %>
+
+    <section>
+        <h2>Pendentes</h2>
+        <% if (pendentes.length === 0) { %>
+            <p class="estado-vazio">Nenhuma dúvida pendente.</p>
+        <% } else { %>
+            <ul class="cards">
+                <% pendentes.forEach(function(duvida) { %>
+                    <li>
+                        <p class="cards__titulo"><%= duvida.pergunta %></p>
+                        <form method="POST" action="/admin/duvidas/<%= duvida.id %>/responder" class="formulario">
+                            <div class="campo">
+                                <label for="resposta-<%= duvida.id %>">Resposta</label>
+                                <textarea id="resposta-<%= duvida.id %>" name="resposta" rows="3" required></textarea>
+                            </div>
+                            <button type="submit" class="botao-primario">Responder</button>
+                        </form>
+                        <form method="POST" action="/admin/duvidas/<%= duvida.id %>/rejeitar" class="form-inline">
+                            <button type="submit">Rejeitar</button>
+                        </form>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } %>
+    </section>
+
+    <section>
+        <h2>Respondidas</h2>
+        <% if (respondidas.length === 0) { %>
+            <p class="estado-vazio">Nenhuma dúvida respondida ainda.</p>
+        <% } else { %>
+            <ul class="cards">
+                <% respondidas.forEach(function(duvida) { %>
+                    <li>
+                        <p class="cards__titulo"><%= duvida.pergunta %></p>
+                        <p><%= duvida.resposta ? duvida.resposta.resposta : '' %></p>
+                        <p class="cards__meta"><%= duvida.publicada ? 'Publicada no FAQ' : 'Não publicada' %></p>
+                        <% if (duvida.publicada) { %>
+                            <form method="POST" action="/admin/duvidas/<%= duvida.id %>/despublicar" class="form-inline">
+                                <button type="submit">Remover do FAQ</button>
+                            </form>
+                        <% } else { %>
+                            <form method="POST" action="/admin/duvidas/<%= duvida.id %>/publicar" class="form-inline form-inline--positivo">
+                                <button type="submit">Publicar no FAQ</button>
+                            </form>
+                        <% } %>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } %>
+    </section>
+
+    <section>
+        <h2>Rejeitadas</h2>
+        <% if (rejeitadas.length === 0) { %>
+            <p class="estado-vazio">Nenhuma dúvida rejeitada.</p>
+        <% } else { %>
+            <ul class="cards">
+                <% rejeitadas.forEach(function(duvida) { %>
+                    <li><%= duvida.pergunta %></li>
+                <% }); %>
+            </ul>
+        <% } %>
+    </section>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

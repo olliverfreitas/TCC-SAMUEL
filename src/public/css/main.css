@@ -167,6 +167,11 @@ select:focus-visible {
     font-weight: bold;
 }
 
+.sucesso {
+    color: #1b5e20;
+    font-weight: bold;
+}
+
 .campo--checkbox label {
     display: flex;
     align-items: center;
@@ -185,6 +190,10 @@ select:focus-visible {
     color: #b00020;
     text-decoration: underline;
     padding: 0;
+}
+
+.form-inline--positivo button {
+    color: #1b5e20;
 }
 
 .tabela-scroll {
@@ -397,6 +406,47 @@ select:focus-visible {
     align-items: center;
     gap: 0.3rem;
     white-space: nowrap;
+}
+
+.glossario-alfabeto {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin: var(--espaco-medio) 0;
+}
+
+.glossario-alfabeto a,
+.glossario-alfabeto span {
+    display: inline-block;
+    min-width: 1.8rem;
+    text-align: center;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.glossario-alfabeto a {
+    text-decoration: underline;
+    color: var(--cor-primaria-escura);
+}
+
+.glossario-alfabeto__ativa {
+    background: var(--cor-primaria);
+    color: #fff !important;
+    text-decoration: none !important;
+}
+
+.glossario-alfabeto__inativa {
+    color: #bbb;
+}
+
+.glossario-lista dt {
+    font-weight: bold;
+    margin-top: var(--espaco-medio);
+}
+
+.glossario-lista dd {
+    margin-left: 0;
+    color: #333;
 }
 
 .site-footer {

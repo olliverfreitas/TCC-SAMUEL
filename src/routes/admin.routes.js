@@ -3,6 +3,7 @@ const { body } = require('express-validator');
 const authController = require('../controllers/auth.controller');
 const adminController = require('../controllers/admin.controller');
 const quizAdminController = require('../controllers/quiz-admin.controller');
+const duvidaAdminController = require('../controllers/duvida-admin.controller');
 const { requireAuth, requireRole } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
@@ -43,5 +44,11 @@ router.post('/quizzes/:id/questoes', quizAdminController.salvarQuestao);
 router.get('/quizzes/:id/questoes/:questaoId/editar', quizAdminController.exibirEdicaoQuestao);
 router.post('/quizzes/:id/questoes/:questaoId/editar', quizAdminController.salvarQuestao);
 router.post('/quizzes/:id/questoes/:questaoId/remover', quizAdminController.removerQuestao);
+
+router.get('/duvidas', duvidaAdminController.listar);
+router.post('/duvidas/:id/responder', duvidaAdminController.responder);
+router.post('/duvidas/:id/rejeitar', duvidaAdminController.rejeitar);
+router.post('/duvidas/:id/publicar', duvidaAdminController.publicar);
+router.post('/duvidas/:id/despublicar', duvidaAdminController.despublicar);
 
 module.exports = router;

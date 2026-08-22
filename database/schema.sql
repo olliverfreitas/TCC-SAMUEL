@@ -74,7 +74,8 @@ CREATE TABLE IF NOT EXISTS tentativa_quiz (
 CREATE TABLE IF NOT EXISTS duvida (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     pergunta TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'respondida')),
+    status TEXT NOT NULL DEFAULT 'pendente' CHECK (status IN ('pendente', 'respondida', 'rejeitada')),
+    publicada INTEGER NOT NULL DEFAULT 0 CHECK (publicada IN (0, 1)),
     criado_em TEXT NOT NULL DEFAULT (datetime('now'))
 );
 
