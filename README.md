@@ -3,7 +3,16 @@
 TCC de Sistemas de Informação (CEUNI FAMETRO). Plataforma web educativa com conteúdo
 curado de fontes oficiais, quiz interativo, canal de dúvidas anônimas e painel admin.
 
-## Instalação
+## Funcionalidades
+
+- Catálogo de conteúdo educativo com filtros por categoria/faixa etária e busca textual
+- Quiz interativo com correção feita inteiramente no servidor
+- Canal de dúvidas 100% anônimo, com moderação e FAQ pública
+- Glossário com busca alfabética
+- Painel administrativo com autenticação e CRUD de conteúdo/quizzes
+- Acessibilidade WCAG 2.1 AA (barra de alto contraste e tamanho de fonte, navegação por teclado)
+
+## Instalação local
 
 1. `npm install`
 2. Copie `.env.example` para `.env` e ajuste os valores (principalmente `ADMIN_EMAIL` e `ADMIN_PASSWORD`)
@@ -11,6 +20,50 @@ curado de fontes oficiais, quiz interativo, canal de dúvidas anônimas e painel
 4. `npm start` (ou `npm run dev` para reiniciar automaticamente a cada alteração)
 
 O servidor sobe em `http://localhost:3000` por padrão (porta configurável em `PORT`).
+
+## Deploy em VPS (Ubuntu)
+
+Pré-requisitos: um VPS Ubuntu com acesso root/sudo e um domínio apontando para o IP do servidor.
+
+1. **Instalar o Node.js LTS** (via NodeSource ou nvm) e o Nginx:
+   ```bash
+   curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+   sudo apt install -y nodejs nginx
+   ```
+
+2. **Enviar o código pro servidor** (ex.: `git clone` ou `rsync`) em `/var/www/plataforma` e instalar as dependências de produção:
+   ```bash
+   cd /var/www/plataforma
+   npm install --omit=dev
+   ```
+
+3. **Criar o `.env` de produção** em `/var/www/plataforma/.env` com `NODE_ENV=production`, `SESSION_SECRET` forte e único, `DB_PATH` apontando pra um caminho persistente, e as credenciais do admin. Rodar o seed uma única vez:
+   ```bash
+   npm run seed
+   ```
+
+4. **Registrar o serviço com systemd** — copie `deploy/plataforma.service` para `/etc/systemd/system/plataforma.service`, ajustando `WorkingDirectory` e `User` se necessário, depois:
+   ```bash
+   sudo systemctl daemon-reload
+   sudo systemctl enable --now plataforma
+   sudo systemctl status plataforma
+   ```
+
+5. **Configurar o Nginx como proxy reverso** — copie `deploy/nginx.conf` para `/etc/nginx/sites-available/plataforma`, ajuste `server_name` pro seu domínio, e ative:
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/plataforma /etc/nginx/sites-enabled/
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+6. **Emitir o certificado HTTPS com Let's Encrypt**:
+   ```bash
+   sudo apt install -y certbot python3-certbot-nginx
+   sudo certbot --nginx -d seu-dominio.com.br
+   ```
+
+Com `NODE_ENV=production`, a aplicação automaticamente ativa `trust proxy` e marca o cookie
+de sessão como `secure` — por isso o HTTPS via Nginx/Let's Encrypt precisa estar na frente
+antes de ativar produção, senão o cookie de sessão não é enviado pelo navegador.
 
 ## Estrutura
 
@@ -22,10 +75,12 @@ src/
   controllers/
   services/
   repositories/
-  middlewares/{error-handler}.js
+  middlewares/{auth,error-handler,rate-limit}.js
   views/{partials,site,admin}/
   public/{css,js,img}/
 database/{schema.sql,seed.js,database.sqlite}
+deploy/{plataforma.service,nginx.conf}
+docs/roteiro-demonstracao.md
 ```
 
 Ver `CLAUDE.md` para stack, convenções e regras do projeto.

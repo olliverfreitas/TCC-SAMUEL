@@ -1,0 +1,15 @@
+[Unit]
+Description=Plataforma Web Educativa - Saude em Foco
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/plataforma
+EnvironmentFile=/var/www/plataforma/.env
+ExecStart=/usr/bin/node src/app.js
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

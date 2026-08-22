@@ -22,4 +22,6 @@ router.post(
 
 router.get('/glossario', glossarioController.exibir);
 
+router.get('/sobre', siteController.sobre);
+
 module.exports = router;

@@ -5,4 +5,8 @@ function home(req, res) {
     res.render('site/home', { titulo: 'Inicio', ...dados });
 }
 
-module.exports = { home };
+function sobre(req, res) {
+    res.render('site/sobre', { titulo: 'Sobre' });
+}
+
+module.exports = { home, sobre };
