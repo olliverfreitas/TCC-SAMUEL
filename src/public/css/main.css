@@ -418,7 +418,7 @@ select:focus-visible {
     color: #fff;
     padding: 1.6rem 1.25rem 1.25rem;
     background: linear-gradient(160deg, var(--cor-tinta) 0%, var(--cor-sal-texto) 100%);
-    border-radius: 180px 180px 18px 18px;
+    border-radius: 50% 50% 14px 14px;
     overflow: hidden;
     isolation: isolate;
 }
