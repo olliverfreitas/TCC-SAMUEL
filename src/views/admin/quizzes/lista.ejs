@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body>
+<%- include('../../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Quizzes</h1>
+    <p><a href="/admin/quizzes/novo">+ Novo quiz</a></p>
+
+    <% if (quizzes.length === 0) { %>
+        <p class="estado-vazio">Nenhum quiz cadastrado ainda.</p>
+    <% } else { %>
+        <div class="tabela-scroll">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th scope="col">Título</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Link público</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% quizzes.forEach(function(quiz) { %>
+                        <tr>
+                            <td><%= quiz.titulo %></td>
+                            <td><%= quiz.categoria_nome || '—' %></td>
+                            <td><a href="/quiz/<%= quiz.id %>">/quiz/<%= quiz.id %></a></td>
+                            <td>
+                                <a href="/admin/quizzes/<%= quiz.id %>/questoes">Questões</a>
+                                <a href="/admin/quizzes/<%= quiz.id %>/editar">Editar</a>
+                                <form method="POST" action="/admin/quizzes/<%= quiz.id %>/remover" class="form-inline">
+                                    <button type="submit">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</main>
+<%- include('../../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

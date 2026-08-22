@@ -2,6 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const authController = require('../controllers/auth.controller');
 const adminController = require('../controllers/admin.controller');
+const quizAdminController = require('../controllers/quiz-admin.controller');
 const { requireAuth, requireRole } = require('../middlewares/auth.middleware');
 
 const router = express.Router();
@@ -29,5 +30,18 @@ router.post('/conteudos/novo', validarConteudo, adminController.salvarConteudo);
 router.get('/conteudos/:id/editar', adminController.exibirFormularioConteudo);
 router.post('/conteudos/:id/editar', validarConteudo, adminController.salvarConteudo);
 router.post('/conteudos/:id/remover', adminController.removerConteudo);
+
+router.get('/quizzes', quizAdminController.listar);
+router.get('/quizzes/novo', quizAdminController.exibirFormulario);
+router.post('/quizzes/novo', quizAdminController.salvar);
+router.get('/quizzes/:id/editar', quizAdminController.exibirFormulario);
+router.post('/quizzes/:id/editar', quizAdminController.salvar);
+router.post('/quizzes/:id/remover', quizAdminController.remover);
+
+router.get('/quizzes/:id/questoes', quizAdminController.exibirQuestoes);
+router.post('/quizzes/:id/questoes', quizAdminController.salvarQuestao);
+router.get('/quizzes/:id/questoes/:questaoId/editar', quizAdminController.exibirEdicaoQuestao);
+router.post('/quizzes/:id/questoes/:questaoId/editar', quizAdminController.salvarQuestao);
+router.post('/quizzes/:id/questoes/:questaoId/remover', quizAdminController.removerQuestao);
 
 module.exports = router;

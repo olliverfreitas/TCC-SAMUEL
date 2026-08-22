@@ -63,10 +63,12 @@ CREATE TABLE IF NOT EXISTS alternativa (
 CREATE TABLE IF NOT EXISTS tentativa_quiz (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     quiz_id INTEGER NOT NULL,
+    usuario_id INTEGER,
     pontuacao INTEGER NOT NULL,
     total INTEGER NOT NULL,
     criado_em TEXT NOT NULL DEFAULT (datetime('now')),
-    FOREIGN KEY (quiz_id) REFERENCES quiz(id)
+    FOREIGN KEY (quiz_id) REFERENCES quiz(id),
+    FOREIGN KEY (usuario_id) REFERENCES usuario(id)
 );
 
 CREATE TABLE IF NOT EXISTS duvida (

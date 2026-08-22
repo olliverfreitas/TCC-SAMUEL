@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body>
+<%- include('../../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <p><a href="/admin/quizzes">&larr; Quizzes</a></p>
+    <h1><%= quiz.titulo %></h1>
+    <p>Link público: <a href="/quiz/<%= quiz.id %>">/quiz/<%= quiz.id %></a></p>
+
+    <h2>Questões cadastradas</h2>
+    <% if (questoes.length === 0) { %>
+        <p class="estado-vazio">Nenhuma questão cadastrada ainda.</p>
+    <% } else { %>
+        <ul class="cards">
+            <% questoes.forEach(function(questao) { %>
+                <li>
+                    <span class="cards__titulo"><%= questao.enunciado %></span>
+                    <ul>
+                        <% questao.alternativas.forEach(function(alt) { %>
+                            <li><%= alt.correta ? '✓ ' : '' %><%= alt.texto %></li>
+                        <% }); %>
+                    </ul>
+                    <a href="/admin/quizzes/<%= quiz.id %>/questoes/<%= questao.id %>/editar">Editar</a>
+                    <form method="POST" action="/admin/quizzes/<%= quiz.id %>/questoes/<%= questao.id %>/remover" class="form-inline">
+                        <button type="submit">Remover</button>
+                    </form>
+                </li>
+            <% }); %>
+        </ul>
+    <% } %>
+
+    <h2><%= questaoEditando ? 'Editar questão' : 'Nova questão' %></h2>
+
+    <% if (erro) { %>
+        <p class="erros" role="alert"><%= erro %></p>
+    <% } %>
+
+    <%
+        const acaoFormulario = questaoEditando
+            ? `/admin/quizzes/${quiz.id}/questoes/${questaoEditando.id}/editar`
+            : `/admin/quizzes/${quiz.id}/questoes`;
+        const alternativasAtuais = questaoEditando ? questaoEditando.alternativas : [];
+        function textoAlternativa(indice) {
+            return alternativasAtuais[indice] ? alternativasAtuais[indice].texto : '';
+        }
+        function ehCorreta(indice) {
+            return alternativasAtuais[indice] && alternativasAtuais[indice].correta;
+        }
+    %>
+
+    <form method="POST" action="<%= acaoFormulario %>" class="formulario">
+        <div class="campo">
+            <label for="enunciado">Enunciado</label>
+            <textarea id="enunciado" name="enunciado" rows="2" required><%= questaoEditando ? questaoEditando.enunciado : '' %></textarea>
+        </div>
+
+        <div class="campo">
+            <label for="explicacao">Explicação (mostrada no resultado)</label>
+            <textarea id="explicacao" name="explicacao" rows="2"><%= questaoEditando ? questaoEditando.explicacao : '' %></textarea>
+        </div>
+
+        <fieldset class="campo">
+            <legend>Alternativas (preencha ao menos 2, marque a correta)</legend>
+            <% [1, 2, 3, 4].forEach(function(n) { %>
+                <div class="alternativa-campo">
+                    <label for="alternativa<%= n %>">Alternativa <%= n %></label>
+                    <input type="text" id="alternativa<%= n %>" name="alternativa<%= n %>" value="<%= textoAlternativa(n - 1) %>" maxlength="300">
+                    <label class="alternativa-campo__radio">
+                        <input type="radio" name="correta" value="<%= n %>" <%= ehCorreta(n - 1) ? 'checked' : '' %>>
+                        Correta
+                    </label>
+                </div>
+            <% }); %>
+        </fieldset>
+
+        <button type="submit" class="botao-primario"><%= questaoEditando ? 'Salvar alterações' : 'Adicionar questão' %></button>
+    </form>
+</main>
+<%- include('../../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>
