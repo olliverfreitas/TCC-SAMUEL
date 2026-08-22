@@ -9,7 +9,7 @@ curado de fontes oficiais, quiz interativo, canal de dúvidas anônimas e painel
 - Backend: Node.js + Express + EJS (renderização no servidor).
 - Banco: SQLite3 via `better-sqlite3`.
 - Dependências permitidas: express, ejs, better-sqlite3, bcrypt, express-session,
-  dotenv, helmet, express-validator. Na fase de deploy entram também
+  dotenv, helmet, express-validator, sanitize-html. Na fase de deploy entram também
   connect-sqlite3 e express-rate-limit. Qualquer outra exige aprovação antes.
 
 ## Motivo da stack

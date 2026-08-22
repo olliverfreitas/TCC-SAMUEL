@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body>
+<%- include('../../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Conteúdos</h1>
+    <p><a href="/admin/conteudos/novo">+ Novo conteúdo</a></p>
+
+    <% if (conteudos.length === 0) { %>
+        <p class="estado-vazio">Nenhum conteúdo cadastrado ainda.</p>
+    <% } else { %>
+        <div class="tabela-scroll">
+            <table class="tabela">
+                <thead>
+                    <tr>
+                        <th scope="col">Título</th>
+                        <th scope="col">Categoria</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Visualizações</th>
+                        <th scope="col">Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% conteudos.forEach(function(conteudo) { %>
+                        <tr>
+                            <td><%= conteudo.titulo %></td>
+                            <td><%= conteudo.categoria_nome %></td>
+                            <td><%= conteudo.publicado ? 'Publicado' : 'Rascunho' %></td>
+                            <td><%= conteudo.visualizacoes %></td>
+                            <td>
+                                <a href="/admin/conteudos/<%= conteudo.id %>/editar">Editar</a>
+                                <form method="POST" action="/admin/conteudos/<%= conteudo.id %>/remover" class="form-inline">
+                                    <button type="submit">Remover</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
+</main>
+<%- include('../../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

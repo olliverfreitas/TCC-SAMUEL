@@ -8,7 +8,7 @@ CREATE TABLE IF NOT EXISTS usuario (
     nome TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     senha_hash TEXT NOT NULL,
-    papel TEXT NOT NULL DEFAULT 'admin' CHECK (papel IN ('admin')),
+    papel TEXT NOT NULL DEFAULT 'admin' CHECK (papel IN ('admin', 'editor')),
     criado_em TEXT NOT NULL DEFAULT (datetime('now'))
 );
 

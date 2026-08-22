@@ -95,6 +95,80 @@ function listarRelacionados(categoriaId, idExcluir, limite) {
         .all(categoriaId, idExcluir, limite);
 }
 
+function contarTotal() {
+    const { total } = db.prepare('SELECT COUNT(*) AS total FROM conteudo').get();
+    return total;
+}
+
+function contarPorPublicado(publicado) {
+    const { total } = db.prepare('SELECT COUNT(*) AS total FROM conteudo WHERE publicado = ?').get(publicado ? 1 : 0);
+    return total;
+}
+
+function listarTodosAdmin() {
+    return db
+        .prepare(
+            `SELECT conteudo.*, categoria.nome AS categoria_nome
+             FROM conteudo
+             JOIN categoria ON categoria.id = conteudo.categoria_id
+             ORDER BY conteudo.criado_em DESC`
+        )
+        .all();
+}
+
+function buscarPorId(id) {
+    return db.prepare('SELECT * FROM conteudo WHERE id = ?').get(id);
+}
+
+function existeSlug(slug, idExcluir) {
+    const query = idExcluir
+        ? db.prepare('SELECT 1 FROM conteudo WHERE slug = ? AND id != ?').get(slug, idExcluir)
+        : db.prepare('SELECT 1 FROM conteudo WHERE slug = ?').get(slug);
+    return Boolean(query);
+}
+
+function criar(dados) {
+    const info = db
+        .prepare(
+            `INSERT INTO conteudo (categoria_id, titulo, slug, resumo, corpo_html, fontes, faixa_etaria, publicado)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+        )
+        .run(
+            dados.categoriaId,
+            dados.titulo,
+            dados.slug,
+            dados.resumo,
+            dados.corpoHtml,
+            dados.fontes,
+            dados.faixaEtaria,
+            dados.publicado ? 1 : 0
+        );
+    return info.lastInsertRowid;
+}
+
+function atualizar(id, dados) {
+    db.prepare(
+        `UPDATE conteudo
+         SET categoria_id = ?, titulo = ?, slug = ?, resumo = ?, corpo_html = ?, fontes = ?,
+             faixa_etaria = ?, publicado = ?, atualizado_em = datetime('now')
+         WHERE id = ?`
+    ).run(
+        dados.categoriaId,
+        dados.titulo,
+        dados.slug,
+        dados.resumo,
+        dados.corpoHtml,
+        dados.fontes,
+        dados.faixaEtaria,
+        dados.publicado ? 1 : 0,
+        id
+    );
+}
+
+function remover(id) {
+    db.prepare('DELETE FROM conteudo WHERE id = ?').run(id);
+}
+
 module.exports = {
     listarPublicadosRecentes,
     listarComFiltros,
@@ -102,4 +176,12 @@ module.exports = {
     buscarPorSlugPublicado,
     incrementarVisualizacoes,
     listarRelacionados,
+    contarTotal,
+    contarPorPublicado,
+    listarTodosAdmin,
+    buscarPorId,
+    existeSlug,
+    criar,
+    atualizar,
+    remover,
 };
