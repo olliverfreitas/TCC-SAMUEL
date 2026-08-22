@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS conteudo (
     fontes TEXT NOT NULL,
     faixa_etaria TEXT NOT NULL DEFAULT 'todas' CHECK (faixa_etaria IN ('adolescente', 'adulto', 'todas')),
     publicado INTEGER NOT NULL DEFAULT 0 CHECK (publicado IN (0, 1)),
+    visualizacoes INTEGER NOT NULL DEFAULT 0,
     criado_em TEXT NOT NULL DEFAULT (datetime('now')),
     atualizado_em TEXT NOT NULL DEFAULT (datetime('now')),
     FOREIGN KEY (categoria_id) REFERENCES categoria(id)

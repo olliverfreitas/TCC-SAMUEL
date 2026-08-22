@@ -145,11 +145,82 @@ select:focus-visible {
     display: block;
     font-weight: bold;
     margin-bottom: 0.3rem;
+    color: var(--cor-primaria-escura);
+    text-decoration: underline;
 }
 
 .cards__meta {
     color: #555;
     font-size: 0.85rem;
+}
+
+.estado-vazio {
+    margin-top: var(--espaco-medio);
+    color: #555;
+}
+
+.filtros {
+    display: flex;
+    flex-direction: column;
+    gap: var(--espaco-medio);
+    margin-top: var(--espaco-medio);
+    max-width: none;
+}
+
+.filtros__campo {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.filtros button {
+    align-self: flex-start;
+    padding: 0.5rem 1.2rem;
+    background: var(--cor-primaria);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+}
+
+@media (min-width: 48rem) {
+    .filtros {
+        flex-direction: row;
+        align-items: flex-end;
+        flex-wrap: wrap;
+    }
+}
+
+.filtros select,
+.filtros input {
+    padding: 0.4rem;
+    border: 1px solid var(--cor-borda);
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.paginacao {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: var(--espaco-grande);
+    gap: var(--espaco-medio);
+}
+
+.paginacao a {
+    text-decoration: underline;
+    color: var(--cor-primaria-escura);
+}
+
+.conteudo__meta {
+    color: #555;
+    font-size: 0.9rem;
+    margin-bottom: var(--espaco-medio);
+}
+
+.conteudo__fontes {
+    margin-top: var(--espaco-grande);
+    font-size: 0.9rem;
+    color: #555;
 }
 
 .site-footer {

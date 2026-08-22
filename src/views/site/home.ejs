@@ -15,7 +15,7 @@
         <ul class="cards">
             <% categorias.forEach(function(categoria) { %>
                 <li>
-                    <span class="cards__titulo"><%= categoria.nome %></span>
+                    <a class="cards__titulo" href="/conteudos?categoria=<%= categoria.slug %>"><%= categoria.nome %></a>
                     <p><%= categoria.descricao %></p>
                 </li>
             <% }); %>
@@ -27,7 +27,7 @@
         <ul class="cards">
             <% conteudosRecentes.forEach(function(conteudo) { %>
                 <li>
-                    <span class="cards__titulo"><%= conteudo.titulo %></span>
+                    <a class="cards__titulo" href="/conteudos/<%= conteudo.slug %>"><%= conteudo.titulo %></a>
                     <p><%= conteudo.resumo %></p>
                     <p class="cards__meta"><%= conteudo.categoria_nome %></p>
                 </li>
@@ -36,6 +36,7 @@
         <% if (conteudosRecentes.length === 0) { %>
             <p>Nenhum conteúdo publicado ainda.</p>
         <% } %>
+        <p><a href="/conteudos">Ver todos os conteúdos</a></p>
     </section>
 </main>
 
