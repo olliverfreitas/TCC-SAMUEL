@@ -6,9 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
-    "db:migrate": "node database/migrate.js",
-    "db:seed": "node database/seed.js",
-    "db:create-admin": "node database/createAdmin.js"
+    "seed": "node database/seed.js"
   },
   "license": "UNLICENSED",
   "dependencies": {

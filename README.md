@@ -3,25 +3,14 @@
 TCC de Sistemas de Informação (CEUNI FAMETRO). Plataforma web educativa com conteúdo
 curado de fontes oficiais, quiz interativo, canal de dúvidas anônimas e painel admin.
 
-## Stack
+## Instalação
 
-- Frontend: HTML5, CSS3 e JavaScript vanilla (ES6+).
-- Backend: Node.js + Express + EJS (renderização no servidor).
-- Banco: SQLite3 via `better-sqlite3`.
+1. `npm install`
+2. Copie `.env.example` para `.env` e ajuste os valores (principalmente `ADMIN_EMAIL` e `ADMIN_PASSWORD`)
+3. `npm run seed` (cria o schema e popula categorias, conteúdos, glossário e o usuário admin)
+4. `npm start` (ou `npm run dev` para reiniciar automaticamente a cada alteração)
 
-## Configuração
-
-```bash
-npm install
-cp .env.example .env
-npm run db:migrate
-npm run db:seed
-npm run db:create-admin -- "Nome do Admin" admin@exemplo.com senha123
-npm start
-```
-
-O servidor sobe em `http://localhost:3000` por padrão. O painel administrativo
-fica em `/admin/login`.
+O servidor sobe em `http://localhost:3000` por padrão (porta configurável em `PORT`).
 
 ## Estrutura
 
@@ -33,8 +22,10 @@ src/
   controllers/
   services/
   repositories/
-  middlewares/{auth,errorHandler}.js
+  middlewares/{error-handler}.js
   views/{partials,site,admin}/
   public/{css,js,img}/
-database/{schema.sql,seed.sql,database.sqlite}
+database/{schema.sql,seed.js,database.sqlite}
 ```
+
+Ver `CLAUDE.md` para stack, convenções e regras do projeto.

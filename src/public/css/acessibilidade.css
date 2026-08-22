@@ -1,0 +1,48 @@
+/* Modo de alto contraste: paleta preto/branco/amarelo, contraste bem acima de 4.5:1 */
+html.alto-contraste body {
+    background: #000;
+    color: #fff;
+}
+
+html.alto-contraste .site-header {
+    background: #000;
+    border-bottom: 2px solid #fff;
+}
+
+html.alto-contraste .site-header a {
+    color: #fff;
+}
+
+html.alto-contraste a {
+    color: #ffd600;
+}
+
+html.alto-contraste .barra-acessibilidade {
+    background: #000;
+    color: #fff;
+    border-bottom: 2px solid #fff;
+}
+
+html.alto-contraste .barra-acessibilidade button {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .cards li {
+    background: #000;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .cards__meta {
+    color: #ffd600;
+}
+
+html.alto-contraste .site-footer {
+    color: #fff;
+}
+
+html.alto-contraste a:focus-visible,
+html.alto-contraste button:focus-visible {
+    outline-color: #ffd600;
+}

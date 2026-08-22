@@ -1,5 +1,5 @@
 function paginaNaoEncontrada(req, res) {
-    res.status(404).render('site/404', { titulo: 'Pagina nao encontrada' });
+    res.status(404).render('site/404', { titulo: 'Página não encontrada' });
 }
 
 function tratarErro(err, req, res, next) {

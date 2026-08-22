@@ -6,31 +6,40 @@
 <body>
 <%- include('../partials/header') %>
 
-<main class="container">
-    <h1>Educacao em saude sexual e reprodutiva</h1>
-    <p>Conteudo confiavel, baseado em fontes oficiais, para ajudar voce a se informar.</p>
+<main id="conteudo-principal" class="container">
+    <h1>Educação em saúde sexual e reprodutiva</h1>
+    <p>Conteúdo confiável, baseado em fontes oficiais, para ajudar você a se informar.</p>
 
-    <h2>Categorias</h2>
-    <ul class="cards">
-        <% categorias.forEach(function(categoria) { %>
-            <li>
-                <a href="/categorias/<%= categoria.slug %>"><%= categoria.nome %></a>
-                <p><%= categoria.descricao %></p>
-            </li>
-        <% }); %>
-    </ul>
+    <section aria-labelledby="titulo-categorias">
+        <h2 id="titulo-categorias">Categorias</h2>
+        <ul class="cards">
+            <% categorias.forEach(function(categoria) { %>
+                <li>
+                    <span class="cards__titulo"><%= categoria.nome %></span>
+                    <p><%= categoria.descricao %></p>
+                </li>
+            <% }); %>
+        </ul>
+    </section>
 
-    <h2>Artigos recentes</h2>
-    <ul class="cards">
-        <% artigos.forEach(function(artigo) { %>
-            <li>
-                <a href="/artigos/<%= artigo.slug %>"><%= artigo.titulo %></a>
-                <p><%= artigo.resumo %></p>
-            </li>
-        <% }); %>
-    </ul>
+    <section aria-labelledby="titulo-conteudos">
+        <h2 id="titulo-conteudos">Conteúdos recentes</h2>
+        <ul class="cards">
+            <% conteudosRecentes.forEach(function(conteudo) { %>
+                <li>
+                    <span class="cards__titulo"><%= conteudo.titulo %></span>
+                    <p><%= conteudo.resumo %></p>
+                    <p class="cards__meta"><%= conteudo.categoria_nome %></p>
+                </li>
+            <% }); %>
+        </ul>
+        <% if (conteudosRecentes.length === 0) { %>
+            <p>Nenhum conteúdo publicado ainda.</p>
+        <% } %>
+    </section>
 </main>
 
 <%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
 </body>
 </html>
