@@ -1,0 +1,10 @@
+<%
+    // Espera uma variável local `faixa` (ex.: 'adolescente', 'adulto', 'todas').
+    const rotulosFaixa = {
+        adolescente: 'Adolescente',
+        adulto: 'Adulto',
+        todas: 'Todas as idades',
+    };
+    const rotuloFaixa = rotulosFaixa[faixa] || 'Todas as idades';
+%>
+<span class="badge-faixa badge-faixa--<%= faixa %>"><%= rotuloFaixa %></span>

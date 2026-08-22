@@ -16,12 +16,24 @@
         const pontuacaoEl = document.getElementById('quiz-resultado-pontuacao');
         const detalhesEl = document.getElementById('quiz-resultado-detalhes');
         const botaoRefazer = document.getElementById('quiz-refazer');
+        const progressoPreenchimento = document.getElementById('quiz-progresso-preenchimento');
+        const progressoPontos = Array.from(document.querySelectorAll('.quiz-progresso__ponto'));
 
         let indice = 0;
 
         function perguntaRespondida(indiceAlvo) {
             const campo = perguntas[indiceAlvo];
             return Boolean(campo.querySelector('input[type="radio"]:checked'));
+        }
+
+        function atualizarProgressoVisual() {
+            if (progressoPreenchimento) {
+                progressoPreenchimento.style.width = Math.round(((indice + 1) / total) * 100) + '%';
+            }
+            progressoPontos.forEach(function (ponto, i) {
+                ponto.classList.toggle('quiz-progresso__ponto--atual', i === indice);
+                ponto.classList.toggle('quiz-progresso__ponto--concluida', i < indice || (i === indice && perguntaRespondida(i)));
+            });
         }
 
         function mostrarPergunta(novoIndice) {
@@ -33,6 +45,7 @@
             botaoAnterior.disabled = indice === 0;
             botaoProxima.hidden = indice === total - 1;
             botaoEnviar.hidden = indice !== total - 1;
+            atualizarProgressoVisual();
             perguntas[indice].querySelector('input[type="radio"]').focus();
         }
 

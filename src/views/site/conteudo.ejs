@@ -10,6 +10,7 @@
     <p><a href="/conteudos?categoria=<%= conteudo.categoria_slug %>">&larr; <%= conteudo.categoria_nome %></a></p>
 
     <h1><%= conteudo.titulo %></h1>
+    <%- include('../partials/badge-faixa', { faixa: conteudo.faixa_etaria }) %>
     <p class="conteudo__meta">
         Tempo de leitura: <%= tempoLeituraMinutos %> min ·
         Revisado em <%= new Date(conteudo.atualizado_em).toLocaleDateString('pt-BR') %>
@@ -25,6 +26,7 @@
             <ul class="cards">
                 <% relacionados.forEach(function(item) { %>
                     <li>
+                        <%- include('../partials/badge-faixa', { faixa: item.faixa_etaria }) %>
                         <a class="cards__titulo" href="/conteudos/<%= item.slug %>"><%= item.titulo %></a>
                         <p><%= item.resumo %></p>
                     </li>

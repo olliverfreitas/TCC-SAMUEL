@@ -25,6 +25,17 @@
                 Pergunta <span id="quiz-indice-atual">1</span> de <%= questoes.length %>
             </p>
 
+            <div class="quiz-progresso" aria-hidden="true">
+                <span class="quiz-progresso__arco">
+                    <span id="quiz-progresso-preenchimento" class="quiz-progresso__preenchimento" style="width: <%= Math.round(100 / questoes.length) %>%"></span>
+                </span>
+                <span id="quiz-progresso-pontos" class="quiz-progresso__pontos">
+                    <% questoes.forEach(function(questao, indice) { %>
+                        <span class="quiz-progresso__ponto <%= indice === 0 ? 'quiz-progresso__ponto--atual' : '' %>" data-ponto="<%= indice %>"></span>
+                    <% }); %>
+                </span>
+            </div>
+
             <form id="quiz-form">
                 <% questoes.forEach(function(questao, indice) { %>
                     <fieldset class="quiz-pergunta" data-indice="<%= indice %>" <%= indice > 0 ? 'hidden' : '' %>>

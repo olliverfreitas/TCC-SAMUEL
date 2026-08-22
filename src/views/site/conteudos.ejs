@@ -46,6 +46,7 @@
         <ul class="cards">
             <% itens.forEach(function(item) { %>
                 <li>
+                    <%- include('../partials/badge-faixa', { faixa: item.faixa_etaria }) %>
                     <a class="cards__titulo" href="/conteudos/<%= item.slug %>"><%= item.titulo %></a>
                     <p><%= item.resumo %></p>
                     <p class="cards__meta"><%= item.categoria_nome %></p>
