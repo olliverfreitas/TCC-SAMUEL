@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main class="container">
+    <h1>Quiz</h1>
+    <form method="POST" action="/quiz">
+        <% perguntas.forEach(function(pergunta) { %>
+            <fieldset>
+                <legend><%= pergunta.enunciado %></legend>
+                <% pergunta.opcoes.forEach(function(opcao) { %>
+                    <label>
+                        <input type="radio" name="<%= pergunta.id %>" value="<%= opcao.id %>" required>
+                        <%= opcao.texto %>
+                    </label>
+                <% }); %>
+            </fieldset>
+        <% }); %>
+        <button type="submit">Ver resultado</button>
+    </form>
+</main>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

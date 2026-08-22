@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/admin-header') %>
+
+<main class="container">
+    <h1>Painel administrativo</h1>
+    <ul class="cards">
+        <li>
+            <a href="/admin/artigos">Artigos</a>
+            <p><%= totalArtigos %> artigo(s) cadastrado(s)</p>
+        </li>
+        <li>
+            <a href="/admin/duvidas">Duvidas</a>
+            <p><%= totalDuvidasPendentes %> duvida(s) pendente(s)</p>
+        </li>
+    </ul>
+</main>
+</body>
+</html>

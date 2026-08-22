@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main class="container">
+    <h1>Educacao em saude sexual e reprodutiva</h1>
+    <p>Conteudo confiavel, baseado em fontes oficiais, para ajudar voce a se informar.</p>
+
+    <h2>Categorias</h2>
+    <ul class="cards">
+        <% categorias.forEach(function(categoria) { %>
+            <li>
+                <a href="/categorias/<%= categoria.slug %>"><%= categoria.nome %></a>
+                <p><%= categoria.descricao %></p>
+            </li>
+        <% }); %>
+    </ul>
+
+    <h2>Artigos recentes</h2>
+    <ul class="cards">
+        <% artigos.forEach(function(artigo) { %>
+            <li>
+                <a href="/artigos/<%= artigo.slug %>"><%= artigo.titulo %></a>
+                <p><%= artigo.resumo %></p>
+            </li>
+        <% }); %>
+    </ul>
+</main>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

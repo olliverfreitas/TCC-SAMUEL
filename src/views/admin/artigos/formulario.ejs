@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body>
+<%- include('../../partials/admin-header') %>
+
+<main class="container">
+    <h1><%= artigo ? 'Editar artigo' : 'Novo artigo' %></h1>
+
+    <form method="POST" action="<%= artigo ? `/admin/artigos/${artigo.id}/editar` : '/admin/artigos/novo' %>">
+        <label for="categoriaId">Categoria</label>
+        <select id="categoriaId" name="categoriaId" required>
+            <% categorias.forEach(function(categoria) { %>
+                <option value="<%= categoria.id %>" <%= artigo && artigo.categoria_id === categoria.id ? 'selected' : '' %>>
+                    <%= categoria.nome %>
+                </option>
+            <% }); %>
+        </select>
+
+        <label for="titulo">Titulo</label>
+        <input type="text" id="titulo" name="titulo" value="<%= artigo ? artigo.titulo : '' %>" required>
+
+        <label for="resumo">Resumo</label>
+        <input type="text" id="resumo" name="resumo" value="<%= artigo ? artigo.resumo : '' %>">
+
+        <label for="conteudo">Conteudo</label>
+        <textarea id="conteudo" name="conteudo" rows="10" required><%= artigo ? artigo.conteudo : '' %></textarea>
+
+        <label for="fonte">Fonte</label>
+        <input type="text" id="fonte" name="fonte" value="<%= artigo ? artigo.fonte : '' %>">
+
+        <label>
+            <input type="checkbox" name="publicado" <%= !artigo || artigo.publicado ? 'checked' : '' %>>
+            Publicado
+        </label>
+
+        <button type="submit">Salvar</button>
+    </form>
+</main>
+</body>
+</html>

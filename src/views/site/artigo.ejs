@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main class="container">
+    <p><a href="/categorias/<%= artigo.categoria_slug %>">&larr; <%= artigo.categoria_nome %></a></p>
+    <h1><%= artigo.titulo %></h1>
+    <article><%- artigo.conteudo %></article>
+    <% if (artigo.fonte) { %>
+        <p class="fonte">Fonte: <%= artigo.fonte %></p>
+    <% } %>
+</main>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main class="container">
+    <h1>Envie sua duvida</h1>
+    <p>Suas perguntas sao enviadas de forma totalmente anonima.</p>
+
+    <% if (enviado) { %>
+        <p class="sucesso">Duvida enviada com sucesso! Em breve ela podera ser respondida.</p>
+    <% } %>
+
+    <% if (erros.length > 0) { %>
+        <ul class="erros">
+            <% erros.forEach(function(erro) { %>
+                <li><%= erro.msg %></li>
+            <% }); %>
+        </ul>
+    <% } %>
+
+    <form method="POST" action="/duvidas">
+        <label for="pergunta">Sua duvida</label>
+        <textarea id="pergunta" name="pergunta" rows="5" required></textarea>
+        <button type="submit">Enviar</button>
+    </form>
+</main>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

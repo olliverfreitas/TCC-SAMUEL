@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body>
+<%- include('../../partials/admin-header') %>
+
+<main class="container">
+    <h1>Artigos</h1>
+    <p><a href="/admin/artigos/novo">+ Novo artigo</a></p>
+
+    <table class="tabela">
+        <thead>
+            <tr>
+                <th>Titulo</th>
+                <th>Categoria</th>
+                <th>Publicado</th>
+                <th>Acoes</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% artigos.forEach(function(artigo) { %>
+                <tr>
+                    <td><%= artigo.titulo %></td>
+                    <td><%= artigo.categoria_nome %></td>
+                    <td><%= artigo.publicado ? 'Sim' : 'Nao' %></td>
+                    <td>
+                        <a href="/admin/artigos/<%= artigo.id %>/editar">Editar</a>
+                        <form method="POST" action="/admin/artigos/<%= artigo.id %>/remover" class="form-inline">
+                            <button type="submit">Remover</button>
+                        </form>
+                    </td>
+                </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
