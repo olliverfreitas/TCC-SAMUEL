@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main id="conteudo-principal" class="container">
+    <p><a href="/conteudos?categoria=<%= conteudo.categoria_slug %>">&larr; <%= conteudo.categoria_nome %></a></p>
+
+    <h1><%= conteudo.titulo %></h1>
+    <%- include('../partials/badge-faixa', { faixa: conteudo.faixa_etaria }) %>
+    <p class="conteudo__meta">
+        Tempo de leitura: <%= tempoLeituraMinutos %> min ·
+        Revisado em <%= new Date(conteudo.atualizado_em).toLocaleDateString('pt-BR') %>
+    </p>
+
+    <article><%- conteudo.corpo_html %></article>
+
+    <p class="conteudo__fontes"><strong>Fontes:</strong> <%= conteudo.fontes %></p>
+
+    <% if (relacionados.length > 0) { %>
+        <section aria-labelledby="titulo-relacionados">
+            <h2 id="titulo-relacionados">Conteúdos relacionados</h2>
+            <ul class="cards">
+                <% relacionados.forEach(function(item) { %>
+                    <li>
+                        <%- include('../partials/badge-faixa', { faixa: item.faixa_etaria }) %>
+                        <a class="cards__titulo" href="/conteudos/<%= item.slug %>"><%= item.titulo %></a>
+                        <p><%= item.resumo %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </section>
+    <% } %>
+</main>
+
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

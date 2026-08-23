@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1><%= quiz.titulo %></h1>
+    <% if (quiz.descricao) { %>
+        <p><%= quiz.descricao %></p>
+    <% } %>
+
+    <% if (questoes.length === 0) { %>
+        <p class="estado-vazio">Este quiz ainda não tem perguntas cadastradas.</p>
+    <% } else { %>
+        <div
+            id="quiz-player"
+            class="quiz-player"
+            data-quiz-id="<%= quiz.id %>"
+            data-total-perguntas="<%= questoes.length %>"
+        >
+            <p class="quiz-player__progresso" aria-live="polite">
+                Pergunta <span id="quiz-indice-atual">1</span> de <%= questoes.length %>
+            </p>
+
+            <div class="quiz-progresso" aria-hidden="true">
+                <span class="quiz-progresso__arco">
+                    <span id="quiz-progresso-preenchimento" class="quiz-progresso__preenchimento" style="width: <%= Math.round(100 / questoes.length) %>%"></span>
+                </span>
+                <span id="quiz-progresso-pontos" class="quiz-progresso__pontos">
+                    <% questoes.forEach(function(questao, indice) { %>
+                        <span class="quiz-progresso__ponto <%= indice === 0 ? 'quiz-progresso__ponto--atual' : '' %>" data-ponto="<%= indice %>"></span>
+                    <% }); %>
+                </span>
+            </div>
+
+            <form id="quiz-form">
+                <% questoes.forEach(function(questao, indice) { %>
+                    <fieldset class="quiz-pergunta" data-indice="<%= indice %>" <%= indice > 0 ? 'hidden' : '' %>>
+                        <legend><%= questao.enunciado %></legend>
+                        <% questao.alternativas.forEach(function(alternativa) { %>
+                            <label class="quiz-alternativa">
+                                <input type="radio" name="questao-<%= questao.id %>" value="<%= alternativa.id %>" data-questao-id="<%= questao.id %>" required>
+                                <%= alternativa.texto %>
+                            </label>
+                        <% }); %>
+                    </fieldset>
+                <% }); %>
+
+                <div class="quiz-player__navegacao">
+                    <button type="button" id="quiz-anterior" disabled>Anterior</button>
+                    <button type="button" id="quiz-proxima">Próxima</button>
+                    <button type="submit" id="quiz-enviar" hidden>Ver resultado</button>
+                </div>
+            </form>
+
+            <section id="quiz-resultado" class="quiz-resultado" hidden aria-live="polite">
+                <h2 tabindex="-1">Resultado</h2>
+                <p id="quiz-resultado-pontuacao"></p>
+                <ul id="quiz-resultado-detalhes" class="cards"></ul>
+                <button type="button" id="quiz-refazer" class="botao-primario">Refazer o quiz</button>
+            </section>
+        </div>
+    <% } %>
+</main>
+
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+<script src="/js/quiz.js"></script>
+</body>
+</html>

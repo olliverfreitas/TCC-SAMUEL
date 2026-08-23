@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body class="admin-body">
+<%- include('../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Painel administrativo</h1>
+    <ul class="cards">
+        <li>
+            <a class="cards__titulo" href="/admin/conteudos">Conteúdos</a>
+            <p><%= totalConteudos %> conteúdo(s) no total</p>
+        </li>
+        <li>
+            <span class="cards__titulo">Publicados</span>
+            <p><%= publicados %> conteúdo(s) publicado(s)</p>
+        </li>
+        <li>
+            <span class="cards__titulo">Rascunhos</span>
+            <p><%= rascunhos %> conteúdo(s) em rascunho</p>
+        </li>
+        <li>
+            <a class="cards__titulo" href="/admin/duvidas">Dúvidas pendentes</a>
+            <p><%= duvidasPendentes %> dúvida(s) aguardando resposta</p>
+        </li>
+    </ul>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

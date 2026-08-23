@@ -1,0 +1,13 @@
+<a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+<%- include('barra-acessibilidade') %>
+<header class="site-header">
+    <a class="site-header__marca" href="/admin">Painel administrativo</a>
+    <nav aria-label="Navegação do painel">
+        <a href="/admin">Início</a>
+        <a href="/admin/conteudos">Conteúdos</a>
+        <a href="/admin/quizzes">Quizzes</a>
+        <form method="POST" action="/admin/logout" class="form-logout">
+            <button type="submit">Sair</button>
+        </form>
+    </nav>
+</header>

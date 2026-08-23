@@ -1,5 +1,5 @@
 node_modules/
 .env
-*.log
 database/database.sqlite
+*.log
 .claude/

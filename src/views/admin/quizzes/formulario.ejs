@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../../partials/head') %>
+</head>
+<body class="admin-body">
+<%- include('../../partials/admin-header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1><%= quiz ? 'Editar quiz' : 'Novo quiz' %></h1>
+
+    <% if (erros.length > 0) { %>
+        <ul class="erros" role="alert">
+            <% erros.forEach(function(erro) { %>
+                <li><%= erro.msg %></li>
+            <% }); %>
+        </ul>
+    <% } %>
+
+    <form
+        method="POST"
+        action="<%= quiz ? `/admin/quizzes/${quiz.id}/editar` : '/admin/quizzes/novo' %>"
+        class="formulario"
+    >
+        <div class="campo">
+            <label for="titulo">Título</label>
+            <input type="text" id="titulo" name="titulo" value="<%= quiz ? quiz.titulo : '' %>" required maxlength="200">
+        </div>
+
+        <div class="campo">
+            <label for="descricao">Descrição</label>
+            <textarea id="descricao" name="descricao" rows="3"><%= quiz ? quiz.descricao : '' %></textarea>
+        </div>
+
+        <div class="campo">
+            <label for="categoriaId">Categoria (opcional)</label>
+            <select id="categoriaId" name="categoriaId">
+                <option value="">Nenhuma</option>
+                <% categorias.forEach(function(categoria) { %>
+                    <option value="<%= categoria.id %>" <%= quiz && Number(quiz.categoria_id) === categoria.id ? 'selected' : '' %>>
+                        <%= categoria.nome %>
+                    </option>
+                <% }); %>
+            </select>
+        </div>
+
+        <button type="submit" class="botao-primario">Salvar e gerenciar questões</button>
+    </form>
+</main>
+<%- include('../../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

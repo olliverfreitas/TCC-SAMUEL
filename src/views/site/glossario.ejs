@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Glossário</h1>
+
+    <nav class="glossario-alfabeto" aria-label="Filtrar por letra">
+        <a href="/glossario" class="<%= !letraAtiva ? 'glossario-alfabeto__ativa' : '' %>">Todas</a>
+        <% 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').forEach(function(letra) { %>
+            <% if (letrasDisponiveis.includes(letra)) { %>
+                <a href="/glossario?letra=<%= letra %>" class="<%= letraAtiva === letra ? 'glossario-alfabeto__ativa' : '' %>"><%= letra %></a>
+            <% } else { %>
+                <span class="glossario-alfabeto__inativa" aria-hidden="true"><%= letra %></span>
+            <% } %>
+        <% }); %>
+    </nav>
+
+    <% if (termos.length === 0) { %>
+        <p class="estado-vazio">Nenhum termo encontrado para essa letra.</p>
+    <% } else { %>
+        <dl class="glossario-lista">
+            <% termos.forEach(function(termo) { %>
+                <dt><%= termo.termo %></dt>
+                <dd><%= termo.definicao %></dd>
+            <% }); %>
+        </dl>
+    <% } %>
+</main>
+
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

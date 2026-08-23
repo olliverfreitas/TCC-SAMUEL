@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body class="admin-body">
+<a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
+<%- include('../partials/barra-acessibilidade') %>
+<main id="conteudo-principal" class="container container-estreito">
+    <h1>Login administrativo</h1>
+    <% if (erro) { %>
+        <p class="erros" role="alert"><%= erro %></p>
+    <% } %>
+    <form method="POST" action="/admin/login" class="formulario">
+        <div class="campo">
+            <label for="email">E-mail</label>
+            <input type="email" id="email" name="email" required autocomplete="username">
+        </div>
+        <div class="campo">
+            <label for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="botao-primario">Entrar</button>
+    </form>
+</main>
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>

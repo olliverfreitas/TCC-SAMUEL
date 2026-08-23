@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<%- include('../partials/head') %>
+</head>
+<body>
+<%- include('../partials/header') %>
+
+<main id="conteudo-principal" class="container">
+    <h1>Educação em saúde sexual e reprodutiva</h1>
+    <p>Conteúdo confiável, baseado em fontes oficiais, para ajudar você a se informar — em cada fase da vida.</p>
+
+    <nav class="selecao-fase" aria-label="Escolher conteúdo por faixa etária">
+        <a class="selecao-fase__arco" href="/conteudos?faixa=adolescente">
+            <span class="selecao-fase__rotulo">Adolescente</span>
+            <span class="selecao-fase__descricao">Descobertas, mudanças no corpo e primeiras dúvidas</span>
+        </a>
+        <a class="selecao-fase__arco" href="/conteudos?faixa=adulto">
+            <span class="selecao-fase__rotulo">Adulto</span>
+            <span class="selecao-fase__descricao">Planejamento familiar, prevenção e cuidado contínuo</span>
+        </a>
+        <a class="selecao-fase__arco" href="/conteudos?faixa=todas">
+            <span class="selecao-fase__rotulo">Todas as idades</span>
+            <span class="selecao-fase__descricao">Informação de base para qualquer momento da vida</span>
+        </a>
+    </nav>
+
+    <section aria-labelledby="titulo-categorias">
+        <h2 id="titulo-categorias">Categorias</h2>
+        <ul class="cards">
+            <% categorias.forEach(function(categoria) { %>
+                <li>
+                    <a class="cards__titulo" href="/conteudos?categoria=<%= categoria.slug %>"><%= categoria.nome %></a>
+                    <p><%= categoria.descricao %></p>
+                </li>
+            <% }); %>
+        </ul>
+    </section>
+
+    <section aria-labelledby="titulo-conteudos">
+        <h2 id="titulo-conteudos">Conteúdos recentes</h2>
+        <ul class="cards">
+            <% conteudosRecentes.forEach(function(conteudo) { %>
+                <li>
+                    <%- include('../partials/badge-faixa', { faixa: conteudo.faixa_etaria }) %>
+                    <a class="cards__titulo" href="/conteudos/<%= conteudo.slug %>"><%= conteudo.titulo %></a>
+                    <p><%= conteudo.resumo %></p>
+                    <p class="cards__meta"><%= conteudo.categoria_nome %></p>
+                </li>
+            <% }); %>
+        </ul>
+        <% if (conteudosRecentes.length === 0) { %>
+            <p>Nenhum conteúdo publicado ainda.</p>
+        <% } %>
+        <p><a href="/conteudos">Ver todos os conteúdos</a></p>
+    </section>
+</main>
+
+<%- include('../partials/footer') %>
+<script src="/js/acessibilidade.js"></script>
+</body>
+</html>
