@@ -1,0 +1,61 @@
+name: Publicar vitrine estática no GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      DB_PATH: database/database.sqlite
+      ADMIN_EMAIL: admin@exemplo.com
+      ADMIN_PASSWORD: senha-temporaria-apenas-para-build
+      SESSION_SECRET: segredo-temporario-apenas-para-build
+      BASE_PATH: /${{ github.event.repository.name }}
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Instalar dependências
+        run: npm ci
+
+      - name: Popular banco de dados de build (dados de exemplo, descartados após o job)
+        run: npm run seed
+
+      - name: Gerar vitrine estática
+        run: npm run build:estatico
+
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Enviar artefato da vitrine estática
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-estatico
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Publicar no GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

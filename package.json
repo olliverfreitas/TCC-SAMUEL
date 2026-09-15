@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "node --watch src/app.js",
-    "seed": "node database/seed.js"
+    "seed": "node database/seed.js",
+    "build:estatico": "node scripts/build-estatico.js"
   },
   "license": "UNLICENSED",
   "dependencies": {
