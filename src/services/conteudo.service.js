@@ -34,6 +34,7 @@ function listarCatalogo(query) {
         paginaAtual,
         totalPaginas,
         categorias: categoriaRepository.listarTodas(),
+        totalPublicados: conteudoRepository.contarPorPublicado(true),
         filtrosAtivos: {
             categoria: filtros.categoriaSlug || '',
             faixa: filtros.faixaEtaria || '',
@@ -58,6 +59,7 @@ function buscarDetalhe(slug) {
         conteudo,
         tempoLeituraMinutos: calcularTempoLeituraMinutos(conteudo.corpo_html),
         relacionados: conteudoRepository.listarRelacionados(conteudo.categoria_id, conteudo.id, LIMITE_RELACIONADOS),
+        totalPublicados: conteudoRepository.contarPorPublicado(true),
     };
 }
 

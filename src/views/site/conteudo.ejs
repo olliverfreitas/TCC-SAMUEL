@@ -16,6 +16,14 @@
         Revisado em <%= new Date(conteudo.atualizado_em).toLocaleDateString('pt-BR') %>
     </p>
 
+    <div class="progresso-leitura" id="progresso-leitura" data-total="<%= totalPublicados %>" data-conteudo-atual="<%= conteudo.slug %>">
+        <p class="progresso-leitura__texto" id="progresso-leitura-texto">Carregando seu progresso de leitura&hellip;</p>
+        <div class="progresso-leitura__arco" id="progresso-leitura-barra" role="progressbar"
+             aria-labelledby="progresso-leitura-texto" aria-valuemin="0" aria-valuemax="<%= totalPublicados %>" aria-valuenow="0">
+            <span class="progresso-leitura__preenchimento" id="progresso-leitura-preenchimento" style="width: 0%"></span>
+        </div>
+    </div>
+
     <article><%- conteudo.corpo_html %></article>
 
     <p class="conteudo__fontes"><strong>Fontes:</strong> <%= conteudo.fontes %></p>
@@ -25,8 +33,9 @@
             <h2 id="titulo-relacionados">Conteúdos relacionados</h2>
             <ul class="cards">
                 <% relacionados.forEach(function(item) { %>
-                    <li>
+                    <li data-slug="<%= item.slug %>">
                         <%- include('../partials/badge-faixa', { faixa: item.faixa_etaria }) %>
+                        <span class="badge-lido" hidden>Lido</span>
                         <a class="cards__titulo" href="/conteudos/<%= item.slug %>"><%= item.titulo %></a>
                         <p><%= item.resumo %></p>
                     </li>
@@ -38,5 +47,6 @@
 
 <%- include('../partials/footer') %>
 <script src="/js/acessibilidade.js"></script>
+<script src="/js/progresso-leitura.js"></script>
 </body>
 </html>

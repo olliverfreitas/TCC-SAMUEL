@@ -622,6 +622,51 @@ select:focus-visible {
     margin-bottom: var(--espaco-medio);
 }
 
+/* ---------- Progresso de leitura (persistido em localStorage, sem conta de usuário) ---------- */
+
+.progresso-leitura {
+    margin: var(--espaco-medio) 0 var(--espaco-grande);
+}
+
+.progresso-leitura__texto {
+    font-weight: 600;
+    color: var(--cor-tinta);
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.progresso-leitura__arco {
+    height: 0.6rem;
+    border-radius: var(--raio-pill);
+    background: var(--cor-borda);
+    overflow: hidden;
+}
+
+.progresso-leitura__preenchimento {
+    display: block;
+    height: 100%;
+    border-radius: var(--raio-pill);
+    background: linear-gradient(90deg, var(--cor-tinta), var(--cor-sal));
+    transition: width 0.25s ease-out;
+}
+
+.badge-lido {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    align-self: flex-start;
+    padding: 0.15rem 0.6rem;
+    border-radius: var(--raio-pill);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--cor-sucesso);
+}
+
+.badge-lido::before {
+    content: '✓';
+}
+
 .conteudo__fontes {
     margin-top: var(--espaco-grande);
     font-size: 0.9rem;

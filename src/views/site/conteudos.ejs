@@ -9,6 +9,14 @@
 <main id="conteudo-principal" class="container">
     <h1>Conteúdos</h1>
 
+    <div class="progresso-leitura" id="progresso-leitura" data-total="<%= totalPublicados %>">
+        <p class="progresso-leitura__texto" id="progresso-leitura-texto">Carregando seu progresso de leitura&hellip;</p>
+        <div class="progresso-leitura__arco" id="progresso-leitura-barra" role="progressbar"
+             aria-labelledby="progresso-leitura-texto" aria-valuemin="0" aria-valuemax="<%= totalPublicados %>" aria-valuenow="0">
+            <span class="progresso-leitura__preenchimento" id="progresso-leitura-preenchimento" style="width: 0%"></span>
+        </div>
+    </div>
+
     <form method="GET" action="/conteudos" class="filtros" role="search">
         <div class="filtros__campo">
             <label for="categoria">Categoria</label>
@@ -45,8 +53,9 @@
     <% } else { %>
         <ul class="cards">
             <% itens.forEach(function(item) { %>
-                <li>
+                <li data-slug="<%= item.slug %>">
                     <%- include('../partials/badge-faixa', { faixa: item.faixa_etaria }) %>
+                    <span class="badge-lido" hidden>Lido</span>
                     <a class="cards__titulo" href="/conteudos/<%= item.slug %>"><%= item.titulo %></a>
                     <p><%= item.resumo %></p>
                     <p class="cards__meta"><%= item.categoria_nome %></p>
@@ -77,5 +86,6 @@
 
 <%- include('../partials/footer') %>
 <script src="/js/acessibilidade.js"></script>
+<script src="/js/progresso-leitura.js"></script>
 </body>
 </html>
