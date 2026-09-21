@@ -195,6 +195,111 @@ function seedConteudos() {
     console.log(`Conteudos inseridos: ${CONTEUDOS.length}`);
 }
 
+// Quiz único de demonstração (o site tem um só quiz, não uma lista deles —
+// por isso o menu aponta direto para /quiz/1 em vez de existir uma página de
+// listagem). As perguntas cobrem os mesmos temas dos 14 conteúdos publicados.
+const QUIZZES = [
+    {
+        titulo: 'Quanto você sabe sobre saúde sexual e planejamento familiar?',
+        descricao: 'Seis perguntas rápidas para testar o que você já sabe sobre os temas deste site.',
+        questoes: [
+            {
+                enunciado: 'Em média, quantos dias dura um ciclo menstrual?',
+                explicacao:
+                    'O ciclo menstrual dura, em média, 28 dias, mas é considerado regular quando varia entre 21 e 35 dias de pessoa para pessoa.',
+                alternativas: [
+                    { texto: '14 dias', correta: false },
+                    { texto: '21 dias', correta: false },
+                    { texto: '28 dias', correta: true },
+                    { texto: '40 dias', correta: false },
+                ],
+            },
+            {
+                enunciado: 'Qual é a principal função do uso correto do preservativo (camisinha)?',
+                explicacao:
+                    'O preservativo, usado corretamente, é o único método que previne ao mesmo tempo ISTs e gravidez não planejada.',
+                alternativas: [
+                    { texto: 'Regular o ciclo menstrual', correta: false },
+                    { texto: 'Prevenir ISTs e gravidez não planejada', correta: true },
+                    { texto: 'Tratar infecções já existentes', correta: false },
+                    { texto: 'Substituir o exame preventivo', correta: false },
+                ],
+            },
+            {
+                enunciado: 'O que é o DIU (Dispositivo Intrauterino)?',
+                explicacao:
+                    'O DIU é um método contraceptivo de longa duração, inserido no útero por um profissional de saúde, podendo ser hormonal ou de cobre.',
+                alternativas: [
+                    { texto: 'Um exame de rotina ginecológica', correta: false },
+                    { texto: 'Um método contraceptivo de longa duração inserido no útero', correta: true },
+                    { texto: 'Um tipo de vacina contra ISTs', correta: false },
+                    { texto: 'Um remédio hormonal em comprimido', correta: false },
+                ],
+            },
+            {
+                enunciado: 'O que é a PrEP (Profilaxia Pré-Exposição)?',
+                explicacao:
+                    'PrEP é o uso preventivo de medicamento antirretroviral antes de uma possível exposição, reduzindo bastante o risco de adquirir HIV. Não existe vacina contra o HIV.',
+                alternativas: [
+                    { texto: 'Um exame para detectar HIV', correta: false },
+                    { texto: 'Um tratamento usado somente após o parto', correta: false },
+                    { texto: 'O uso de medicamento antes da exposição para reduzir o risco de HIV', correta: true },
+                    { texto: 'Uma vacina contra o HIV', correta: false },
+                ],
+            },
+            {
+                enunciado: 'O consentimento em uma relação deve ser:',
+                explicacao:
+                    'Consentimento válido é claro, livre, informado e contínuo — pode ser retirado a qualquer momento, mesmo em um relacionamento já estabelecido.',
+                alternativas: [
+                    { texto: 'Assumido se a pessoa não disser não', correta: false },
+                    { texto: 'Dado uma única vez para toda a relação', correta: false },
+                    { texto: 'Claro, livre, informado e pode ser retirado a qualquer momento', correta: true },
+                    { texto: 'Necessário apenas em relacionamentos novos', correta: false },
+                ],
+            },
+            {
+                enunciado: 'Por que fazer o teste para ISTs mesmo sem apresentar sintomas?',
+                explicacao:
+                    'Muitas ISTs podem ser assintomáticas por um bom tempo; o diagnóstico precoce evita complicações de saúde e reduz a transmissão para outras pessoas.',
+                alternativas: [
+                    {
+                        texto: 'Porque muitas ISTs podem ser assintomáticas e o diagnóstico precoce evita complicações e transmissão',
+                        correta: true,
+                    },
+                    { texto: 'Porque é obrigatório por lei antes de qualquer relação', correta: false },
+                    { texto: 'Porque substitui o uso de preservativo', correta: false },
+                    { texto: 'Porque só é necessário depois dos 40 anos', correta: false },
+                ],
+            },
+        ],
+    },
+];
+
+function seedQuizzes() {
+    if (!tabelaVazia('quiz')) return;
+
+    const inserirQuiz = db.prepare('INSERT INTO quiz (categoria_id, titulo, descricao) VALUES (NULL, ?, ?)');
+    const inserirQuestao = db.prepare('INSERT INTO questao (quiz_id, enunciado, explicacao, ordem) VALUES (?, ?, ?, ?)');
+    const inserirAlternativa = db.prepare('INSERT INTO alternativa (questao_id, texto, correta) VALUES (?, ?, ?)');
+
+    const transacao = db.transaction((quizzes) => {
+        quizzes.forEach((quiz) => {
+            const quizId = inserirQuiz.run(quiz.titulo, quiz.descricao).lastInsertRowid;
+            quiz.questoes.forEach((questao, indice) => {
+                const questaoId = inserirQuestao.run(quizId, questao.enunciado, questao.explicacao, indice + 1)
+                    .lastInsertRowid;
+                questao.alternativas.forEach((alternativa) => {
+                    inserirAlternativa.run(questaoId, alternativa.texto, alternativa.correta ? 1 : 0);
+                });
+            });
+        });
+    });
+
+    transacao(QUIZZES);
+    console.log(`Quizzes inseridos: ${QUIZZES.length}`);
+}
+
 const GLOSSARIO = [
     { termo: 'IST', definicao: 'Infecção Sexualmente Transmissível, transmitida principalmente por contato sexual.' },
     { termo: 'Preservativo', definicao: 'Método de barreira que previne ISTs e gravidez não planejada.' },
@@ -242,6 +347,7 @@ function seedAdmin() {
 
 seedCategorias();
 seedConteudos();
+seedQuizzes();
 seedGlossario();
 seedAdmin();
 
