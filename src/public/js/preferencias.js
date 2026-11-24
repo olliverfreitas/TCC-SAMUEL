@@ -6,6 +6,10 @@
 // preferencias so voltavam depois, pelo acessibilidade.js, com a pagina ja
 // desenhada. Em arquivo proprio, roda — e o CSP continua sem brecha para inline.
 (function () {
+    // Sinaliza ao CSS que ha JavaScript: so entao o menu do celular comeca
+    // fechado atras do botao "Menu". Sem JS, o menu fica sempre visivel.
+    document.documentElement.classList.add('com-js');
+
     try {
         var fonte = localStorage.getItem('acessibilidade-fonte');
         var contraste = localStorage.getItem('acessibilidade-contraste');

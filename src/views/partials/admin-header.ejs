@@ -1,13 +1,21 @@
 <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
-<%- include('barra-acessibilidade') %>
-<header class="site-header">
-    <a class="site-header__marca" href="/admin">Painel administrativo</a>
-    <nav aria-label="Navegação do painel">
-        <a href="/admin">Início</a>
-        <a href="/admin/conteudos">Conteúdos</a>
-        <a href="/admin/quizzes">Quizzes</a>
-        <form method="POST" action="/admin/logout" class="form-logout">
-            <button type="submit">Sair</button>
-        </form>
-    </nav>
+<header class="site-header site-header--admin">
+    <div class="site-header__faixa">
+        <a class="site-header__marca" href="/admin">Painel administrativo</a>
+        <div class="site-header__menu site-header__menu--fixo">
+            <nav aria-label="Navegação do painel">
+                <ul class="site-header__links">
+                    <li><a href="/admin">Início</a></li>
+                    <li><a href="/admin/conteudos">Conteúdos</a></li>
+                    <li><a href="/admin/quizzes">Quizzes</a></li>
+                    <li>
+                        <form method="POST" action="/admin/logout" class="form-logout">
+                            <button type="submit">Sair</button>
+                        </form>
+                    </li>
+                </ul>
+            </nav>
+            <%- include('barra-acessibilidade') %>
+        </div>
+    </div>
 </header>

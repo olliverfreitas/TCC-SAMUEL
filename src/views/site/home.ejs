@@ -6,54 +6,88 @@
 <body>
 <%- include('../partials/header') %>
 
-<main id="conteudo-principal" class="container">
-    <h1>Educação em saúde sexual e reprodutiva</h1>
-    <p>Conteúdo confiável, baseado em fontes oficiais, para ajudar você a se informar — em cada fase da vida.</p>
+<main id="conteudo-principal">
+    <section class="abertura" aria-labelledby="titulo-abertura">
+        <div class="abertura__interior">
+            <div class="abertura__texto">
+                <h1 id="titulo-abertura">Educação em saúde sexual e reprodutiva</h1>
+                <p class="abertura__apoio">Conteúdo confiável, baseado em fontes oficiais, para ajudar você a se informar em cada fase da vida.</p>
 
-    <nav class="selecao-fase" aria-label="Escolher conteúdo por faixa etária">
-        <a class="selecao-fase__arco" href="/conteudos?faixa=adolescente">
-            <span class="selecao-fase__rotulo">Adolescente</span>
-            <span class="selecao-fase__descricao">Descobertas, mudanças no corpo e primeiras dúvidas</span>
-        </a>
-        <a class="selecao-fase__arco" href="/conteudos?faixa=adulto">
-            <span class="selecao-fase__rotulo">Adulto</span>
-            <span class="selecao-fase__descricao">Planejamento familiar, prevenção e cuidado contínuo</span>
-        </a>
-        <a class="selecao-fase__arco" href="/conteudos?faixa=todas">
-            <span class="selecao-fase__rotulo">Todas as idades</span>
-            <span class="selecao-fase__descricao">Informação de base para qualquer momento da vida</span>
-        </a>
-    </nav>
+                <form class="busca-rapida" method="GET" action="/conteudos" role="search">
+                    <label for="busca-home">Procure um assunto</label>
+                    <div class="busca-rapida__linha">
+                        <input type="search" id="busca-home" name="q" placeholder="Ex.: pílula, pré-natal, HPV">
+                        <button type="submit">Buscar</button>
+                    </div>
+                </form>
+            </div>
 
-    <section aria-labelledby="titulo-categorias">
-        <h2 id="titulo-categorias">Categorias</h2>
-        <ul class="cards">
-            <% categorias.forEach(function(categoria) { %>
-                <li>
-                    <a class="cards__titulo" href="/conteudos?categoria=<%= categoria.slug %>"><%= categoria.nome %></a>
-                    <p><%= categoria.descricao %></p>
-                </li>
-            <% }); %>
-        </ul>
+            <%# Os tres arcos tem a mesma cor do selo de faixa etaria de cada
+                artigo, para a pessoa reconhecer a faixa nas listagens depois. %>
+            <nav class="selecao-fase" aria-label="Escolher conteúdo por faixa etária">
+                <a class="selecao-fase__arco selecao-fase__arco--adolescente" href="/conteudos?faixa=adolescente">
+                    <span class="selecao-fase__rotulo">Adolescente</span>
+                    <span class="selecao-fase__descricao">Descobertas, mudanças no corpo e primeiras dúvidas</span>
+                </a>
+                <a class="selecao-fase__arco selecao-fase__arco--adulto" href="/conteudos?faixa=adulto">
+                    <span class="selecao-fase__rotulo">Adulto</span>
+                    <span class="selecao-fase__descricao">Planejamento familiar, prevenção e cuidado contínuo</span>
+                </a>
+                <a class="selecao-fase__arco selecao-fase__arco--todas" href="/conteudos?faixa=todas">
+                    <span class="selecao-fase__rotulo">Todas as idades</span>
+                    <span class="selecao-fase__descricao">Informação de base para qualquer momento da vida</span>
+                </a>
+            </nav>
+        </div>
     </section>
 
-    <section aria-labelledby="titulo-conteudos">
-        <h2 id="titulo-conteudos">Conteúdos recentes</h2>
-        <ul class="cards">
-            <% conteudosRecentes.forEach(function(conteudo) { %>
-                <li>
-                    <%- include('../partials/badge-faixa', { faixa: conteudo.faixa_etaria }) %>
-                    <a class="cards__titulo" href="/conteudos/<%= conteudo.slug %>"><%= conteudo.titulo %></a>
-                    <p><%= conteudo.resumo %></p>
-                    <p class="cards__meta"><%= conteudo.categoria_nome %></p>
-                </li>
-            <% }); %>
-        </ul>
-        <% if (conteudosRecentes.length === 0) { %>
-            <p>Nenhum conteúdo publicado ainda.</p>
-        <% } %>
-        <p><a href="/conteudos">Ver todos os conteúdos</a></p>
-    </section>
+    <div class="container">
+        <section aria-labelledby="titulo-categorias">
+            <h2 id="titulo-categorias">Categorias</h2>
+            <ul class="indice-categorias">
+                <% categorias.forEach(function(categoria) { %>
+                    <li>
+                        <a href="/conteudos?categoria=<%= categoria.slug %>"><%= categoria.nome %></a>
+                        <p><%= categoria.descricao %></p>
+                    </li>
+                <% }); %>
+            </ul>
+        </section>
+
+        <section aria-labelledby="titulo-conteudos">
+            <div class="cabecalho-secao">
+                <h2 id="titulo-conteudos">Conteúdos recentes</h2>
+                <a href="/conteudos">Ver todos os conteúdos</a>
+            </div>
+            <% if (conteudosRecentes.length === 0) { %>
+                <p class="estado-vazio">Nenhum conteúdo publicado ainda.</p>
+            <% } else { %>
+                <ul class="cards cards--recentes">
+                    <% conteudosRecentes.forEach(function(conteudo, indice) { %>
+                        <li<% if (indice === 0) { %> class="cards__destaque"<% } %>>
+                            <%- include('../partials/badge-faixa', { faixa: conteudo.faixa_etaria }) %>
+                            <a class="cards__titulo" href="/conteudos/<%= conteudo.slug %>"><%= conteudo.titulo %></a>
+                            <p><%= conteudo.resumo %></p>
+                            <p class="cards__meta"><%= conteudo.categoria_nome %></p>
+                        </li>
+                    <% }); %>
+                </ul>
+            <% } %>
+        </section>
+
+        <section class="paineis" aria-label="Outros recursos">
+            <div class="painel painel--servicos">
+                <h2>Unidades de saúde em Manaus</h2>
+                <p>Veja as unidades mais perto de você, com filtro por bairro e por atendimento pelo SUS.</p>
+                <a class="painel__acao" href="/servicos">Ver unidades de saúde</a>
+            </div>
+            <div class="painel painel--duvidas">
+                <h2>Pergunte sem se identificar</h2>
+                <p>Não pedimos nome, e-mail nem cadastro. As perguntas respondidas viram perguntas frequentes para todo mundo.</p>
+                <a class="painel__acao" href="/duvidas">Fazer uma pergunta</a>
+            </div>
+        </section>
+    </div>
 </main>
 
 <%- include('../partials/footer') %>
