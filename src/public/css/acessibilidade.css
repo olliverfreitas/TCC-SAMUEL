@@ -72,3 +72,150 @@ html.alto-contraste .servicos__aviso-permissao,
 html.alto-contraste .servicos__fonte {
     color: #fff;
 }
+
+/* ---------- Cabecalho, menu e home (interface de destaque) ---------- */
+
+html.alto-contraste .site-header {
+    border-bottom: 3px solid #ffd600;
+}
+
+html.alto-contraste .site-header__botao-menu,
+html.alto-contraste .site-header .barra-acessibilidade button,
+html.alto-contraste .form-logout button {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .site-header__botao-menu[aria-expanded="true"],
+html.alto-contraste .site-header .barra-acessibilidade button[aria-pressed="true"] {
+    background: #ffd600;
+    color: #000;
+    border-color: #ffd600;
+}
+
+html.alto-contraste .site-header__links a[aria-current="page"] {
+    color: #ffd600;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+
+html.alto-contraste .site-header__links a.site-header__pergunta {
+    background: #ffd600;
+    color: #000;
+}
+
+html.alto-contraste .abertura,
+html.alto-contraste .painel {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .abertura h1,
+html.alto-contraste .painel h2,
+html.alto-contraste .abertura__apoio {
+    color: #fff;
+}
+
+html.alto-contraste .busca-rapida input {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .busca-rapida button,
+html.alto-contraste .painel__acao {
+    background: #ffd600;
+    color: #000;
+}
+
+html.alto-contraste .selecao-fase__arco {
+    background: #000;
+    color: #fff;
+    border: 2px solid #ffd600;
+}
+
+html.alto-contraste .selecao-fase__arco::before {
+    display: none;
+}
+
+html.alto-contraste .indice-categorias li {
+    border-left-color: #ffd600;
+}
+
+html.alto-contraste .indice-categorias p,
+html.alto-contraste .cards li p {
+    color: #fff;
+}
+
+html.alto-contraste .cards--recentes .cards__destaque {
+    border-top: 4px solid #ffd600;
+}
+
+/* Os titulos usam a cor --cor-tinta (verde-petroleo), que some sobre o fundo
+   preto. Valia para todas as paginas, nao so para a home. */
+html.alto-contraste h1,
+html.alto-contraste h2,
+html.alto-contraste h3,
+html.alto-contraste legend {
+    color: #fff;
+}
+
+/* O canal do Disque Saude (RF04) herdava a cor de texto escura e sumia. */
+html.alto-contraste .site-footer__canal {
+    color: #fff;
+}
+
+/* A borda da faixa clara de acessibilidade nao vale quando os botoes estao
+   dentro do cabecalho. */
+html.alto-contraste .site-header .barra-acessibilidade {
+    border: none;
+}
+
+/* ---------- Cobertura geral do alto contraste ----------
+   Varios componentes tinham fundo branco ou cor de texto fixa que o modo nao
+   cobria (cards da trilha, perguntas do quiz, glossario, labels de formulario).
+   Em vez de corrigir um por um, o texto do conteudo passa a ser branco por
+   padrao e os componentes de fundo claro passam a ter fundo preto com borda. */
+
+html.alto-contraste main :where(p, span, li, dt, dd, label, legend, strong, em, small, td, th, nav, div, figcaption, summary) {
+    color: #fff;
+}
+
+html.alto-contraste .quiz-pergunta,
+html.alto-contraste .trilha-artigos li,
+html.alto-contraste .quiz-cadeado,
+html.alto-contraste .servicos__erro,
+html.alto-contraste .servicos__mapa-indisponivel:not([hidden]),
+html.alto-contraste .barra-acessibilidade {
+    background: #000;
+    color: #fff;
+    border: 2px solid #fff;
+}
+
+html.alto-contraste .cards__titulo,
+html.alto-contraste .trilha-artigos a {
+    color: #ffd600;
+}
+
+/* Os selos de faixa etaria mantem o fundo colorido; o texto precisa ser preto. */
+html.alto-contraste .badge-faixa,
+html.alto-contraste .badge-faixa * {
+    color: #000;
+}
+
+/* O selo Lido tem fundo verde-escuro: o texto continua branco. */
+html.alto-contraste .badge-lido {
+    color: #fff;
+}
+
+html.alto-contraste .botao-secundario {
+    background: #000;
+    color: #fff;
+    border-color: #fff;
+}
+
+html.alto-contraste .botao-secundario:hover {
+    background: #222;
+}

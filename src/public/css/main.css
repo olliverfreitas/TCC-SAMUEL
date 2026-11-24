@@ -74,6 +74,8 @@
     --espaco-medio: 1rem;
     --espaco-grande: 2rem;
 
+    --largura-pagina: 75rem;
+
     --raio-card: 14px;
     --raio-pill: 999px;
 }
@@ -149,24 +151,23 @@ select:focus-visible {
     top: 0;
 }
 
+/* ---------- Ajustes de leitura (fonte e contraste) ----------
+   Fora do cabecalho (tela de login do admin) aparece como faixa clara;
+   dentro dele, como grupo compacto (ver .site-header .barra-acessibilidade). */
+
 .barra-acessibilidade {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--espaco-pequeno);
+    gap: 0.4rem;
     padding: 0.6rem var(--espaco-medio);
     background: #DCE6E1;
     border-bottom: 1px solid var(--cor-borda);
     font-size: 0.85rem;
-    font-family: var(--fonte-base);
-}
-
-.barra-acessibilidade__rotulo {
-    font-weight: 600;
-    color: var(--cor-tinta);
 }
 
 .barra-acessibilidade button {
+    min-height: 2.25rem;
     padding: 0.3rem 0.7rem;
     border: 1px solid var(--cor-sal);
     border-radius: 6px;
@@ -174,6 +175,7 @@ select:focus-visible {
     color: var(--cor-tinta);
     font-weight: 600;
     font-family: var(--fonte-base);
+    font-size: 0.85rem;
 }
 
 .barra-acessibilidade button:hover {
@@ -186,13 +188,33 @@ select:focus-visible {
     border-color: var(--cor-tinta);
 }
 
+/* ---------- Cabecalho ---------- */
+
+/* O cabecalho fica preso no topo; isto evita que o alvo do skip link e das
+   ancoras do glossario fique escondido atras dele. */
+html {
+    scroll-padding-top: 5.5rem;
+}
+
 .site-header {
-    display: flex;
-    flex-direction: column;
-    gap: var(--espaco-pequeno);
-    padding: var(--espaco-medio);
+    position: sticky;
+    top: 0;
+    /* Acima dos controles do mapa Leaflet (z-index 1000) na pagina de servicos. */
+    z-index: 1100;
     background: var(--cor-tinta);
     color: var(--cor-papel);
+    border-bottom: 3px solid var(--cor-farol);
+}
+
+.site-header__faixa {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+    max-width: var(--largura-pagina);
+    margin: 0 auto;
+    padding: 0.7rem var(--espaco-medio);
 }
 
 .site-header a {
@@ -208,65 +230,232 @@ select:focus-visible {
 .site-header__marca {
     font-family: var(--fonte-display);
     font-weight: 700;
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     letter-spacing: -0.01em;
 }
 
-.site-header nav {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--espaco-medio);
-}
-
-.site-header nav > a {
-    position: relative;
-    padding: 0.15rem 0;
+.site-header__botao-menu {
+    display: none;
+    min-height: 2.5rem;
+    padding: 0.4rem 1rem;
+    border: 2px solid var(--cor-papel);
+    border-radius: var(--raio-pill);
+    background: transparent;
+    color: var(--cor-papel);
     font-weight: 600;
+    font-family: var(--fonte-base);
     font-size: 0.95rem;
 }
 
-.site-header nav > a::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    right: 100%;
-    bottom: -3px;
-    height: 2px;
-    background: var(--cor-farol);
-    transition: right 0.18s ease-out;
+.site-header__botao-menu[aria-expanded="true"] {
+    background: var(--cor-papel);
+    color: var(--cor-tinta);
 }
 
-.site-header nav > a:hover::after,
-.site-header nav > a:focus-visible::after {
-    right: 0;
+.site-header__menu {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    padding-bottom: 0.5rem;
+}
+
+.site-header__links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.site-header__links a {
+    display: block;
+    padding: 0.6rem 0.25rem;
+    font-weight: 600;
+    font-size: 1rem;
+    border-bottom: 1px solid rgba(239, 243, 238, 0.14);
+}
+
+/* Pagina atual: barra mostarda, a mesma cor da borda inferior do cabecalho. */
+.site-header__links a[aria-current="page"] {
+    color: var(--cor-farol);
+    box-shadow: inset 4px 0 0 var(--cor-farol);
+    padding-left: 0.85rem;
+}
+
+.site-header__links a.site-header__pergunta {
+    display: inline-block;
+    margin-top: 0.6rem;
+    padding: 0.6rem 1.2rem;
+    border: none;
+    border-radius: var(--raio-pill);
+    background: var(--cor-calor-badge);
+    color: var(--cor-tinta);
+}
+
+.site-header__links a.site-header__pergunta:hover {
+    background: #F29682;
+}
+
+.site-header__links a.site-header__pergunta[aria-current="page"] {
+    box-shadow: 0 0 0 3px var(--cor-farol);
+    padding-left: 1.2rem;
+    color: var(--cor-tinta);
+}
+
+.site-header .barra-acessibilidade {
+    padding: 0;
+    background: transparent;
+    border: none;
+}
+
+.site-header .barra-acessibilidade button {
+    background: transparent;
+    color: var(--cor-papel);
+    border-color: rgba(239, 243, 238, 0.45);
+}
+
+.site-header .barra-acessibilidade button:hover {
+    border-color: var(--cor-papel);
+}
+
+.site-header .barra-acessibilidade button[aria-pressed="true"] {
+    background: var(--cor-farol);
+    color: var(--cor-tinta);
+    border-color: var(--cor-farol);
+}
+
+.form-logout {
+    margin: 0;
 }
 
 .form-logout button {
+    margin-top: 0.4rem;
     background: transparent;
     border: 1px solid var(--cor-papel);
     color: var(--cor-papel);
-    padding: 0.3rem 0.8rem;
+    padding: 0.3rem 0.9rem;
     border-radius: var(--raio-pill);
     font-weight: 600;
+    font-family: var(--fonte-base);
 }
 
 .form-logout button:hover {
     background: rgba(239, 243, 238, 0.12);
 }
 
-@media (min-width: 40rem) {
-    .site-header {
+/* Com JavaScript, o menu do celular comeca fechado atras do botao. Sem JS,
+   estas regras nao se aplicam e o menu fica sempre aberto. */
+.com-js .site-header__botao-menu {
+    display: inline-block;
+}
+
+.com-js .site-header__menu:not(.site-header__menu--fixo):not(.site-header__menu--aberto) {
+    display: none;
+}
+
+.site-header__menu--aberto {
+    max-height: calc(100vh - 5rem);
+    overflow-y: auto;
+}
+
+/* Telas largas: tudo numa linha so, sem botao de menu. */
+@media (min-width: 64rem) {
+    .com-js .site-header__botao-menu {
+        display: none;
+    }
+
+    .com-js .site-header__menu:not(.site-header__menu--fixo):not(.site-header__menu--aberto),
+    .site-header__menu {
+        display: flex;
         flex-direction: row;
-        justify-content: space-between;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: flex-end;
+        gap: 0.75rem 1.5rem;
+        width: auto;
+        flex: 1;
+        padding-bottom: 0;
+        max-height: none;
+        overflow: visible;
+    }
+
+    .site-header__links {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0.25rem 1.1rem;
+    }
+
+    .site-header__links a {
+        padding: 0.45rem 0;
+        font-size: 0.95rem;
+        border-bottom: none;
+    }
+
+    .site-header__links a:not(.site-header__pergunta):hover {
+        box-shadow: inset 0 -2px 0 var(--cor-papel);
+    }
+
+    .site-header__links a[aria-current="page"],
+    .site-header__links a[aria-current="page"]:not(.site-header__pergunta):hover {
+        padding-left: 0;
+        box-shadow: inset 0 -3px 0 var(--cor-farol);
+    }
+
+    .site-header__links a.site-header__pergunta {
+        margin: 0 0 0 0.4rem;
+        padding: 0.5rem 1.1rem;
+    }
+
+    .site-header__links a.site-header__pergunta[aria-current="page"] {
+        padding-left: 1.1rem;
+        box-shadow: 0 0 0 3px var(--cor-farol);
+    }
+
+    .form-logout button {
+        margin-top: 0;
     }
 }
 
+/* O painel admin tem poucos links: cabe em linha a partir de telas medias. */
+@media (min-width: 40rem) {
+    .site-header--admin .site-header__menu {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        width: auto;
+        flex: 1;
+        padding-bottom: 0;
+    }
+
+    .site-header--admin .site-header__links {
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .site-header--admin .site-header__links a {
+        border-bottom: none;
+    }
+}
+
+/* ---------- Largura das paginas ---------- */
+
 .container {
-    max-width: 60rem;
+    max-width: var(--largura-pagina);
     margin: 0 auto;
     padding: var(--espaco-grande) var(--espaco-medio);
+}
+
+/* Paragrafo solto na pagina larga continua com linha confortavel de ler. */
+.container > p,
+.container > section > p {
+    max-width: 42rem;
+}
+
+/* Paginas de leitura corrida (artigo, quiz, sobre, duvidas). */
+.container--leitura {
+    max-width: 48rem;
 }
 
 .container h1 {
@@ -406,24 +595,109 @@ select:focus-visible {
     color: var(--cor-tinta);
 }
 
-.container section {
-    margin-top: var(--espaco-grande);
+/* ---------- Abertura da home: faixa verde-petroleo com a mare de fases ---------- */
+
+.abertura {
+    background: var(--cor-tinta);
+    color: var(--cor-papel);
+    /* Corta os arcos enquanto eles sobem na animacao de entrada. */
+    overflow: hidden;
 }
 
-/* ---------- Seletor de fase (elemento-assinatura "Maré") ---------- */
+.abertura__interior {
+    display: grid;
+    /* minmax(0, ...) deixa a coluna encolher abaixo da largura natural do
+       campo de busca; sem isso o texto estoura a tela em 320px. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2.5rem;
+    max-width: var(--largura-pagina);
+    margin: 0 auto;
+    padding: 2.5rem var(--espaco-medio) 1.5rem;
+}
+
+.abertura h1 {
+    color: var(--cor-papel);
+    font-size: clamp(2.25rem, 1.5rem + 3.4vw, 4.25rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    max-width: 13ch;
+}
+
+.abertura__apoio {
+    margin-top: 1.1rem;
+    max-width: 34rem;
+    font-size: 1.125rem;
+    color: #D3DED8;
+}
+
+/* ---------- Busca rapida ---------- */
+
+.busca-rapida {
+    margin-top: 2rem;
+    max-width: 32rem;
+}
+
+.busca-rapida label {
+    display: block;
+    margin-bottom: 0.45rem;
+    font-weight: 600;
+}
+
+.busca-rapida__linha {
+    display: flex;
+    gap: 0.4rem;
+}
+
+.busca-rapida input {
+    flex: 1;
+    min-width: 0;
+    min-height: 3rem;
+    padding: 0.6rem 1.1rem;
+    border: 2px solid transparent;
+    border-radius: var(--raio-pill);
+    background: var(--cor-papel);
+    color: var(--cor-noite);
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+.busca-rapida input::placeholder {
+    color: #56665F;
+}
+
+.busca-rapida input:focus-visible {
+    outline: 3px solid var(--cor-farol);
+    outline-offset: 2px;
+}
+
+.busca-rapida button {
+    min-height: 3rem;
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: var(--raio-pill);
+    background: var(--cor-farol);
+    color: var(--cor-tinta);
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+.busca-rapida button:hover {
+    background: #EDBA5C;
+}
+
+.busca-rapida button:focus-visible {
+    outline: 3px solid var(--cor-papel);
+    outline-offset: 2px;
+}
+
+/* ---------- Seletor de fase (elemento-assinatura "Mare") ----------
+   Cada arco tem a cor do selo daquela faixa etaria nos cards (.badge-faixa). */
 
 .selecao-fase {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 0.75rem;
-    margin: var(--espaco-grande) 0;
-}
-
-@media (min-width: 40rem) {
-    .selecao-fase {
-        grid-template-columns: repeat(3, 1fr);
-        align-items: end;
-    }
+    gap: 0.6rem;
 }
 
 .selecao-fase__arco {
@@ -431,47 +705,237 @@ select:focus-visible {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    gap: 0.35rem;
+    gap: 0.3rem;
+    min-height: 6.5rem;
+    padding: 1.5rem 1.25rem 1.1rem;
     text-decoration: none;
-    color: #fff;
-    padding: 1.6rem 1.25rem 1.25rem;
-    background: linear-gradient(160deg, var(--cor-tinta) 0%, var(--cor-sal-texto) 100%);
-    border-radius: 50% 50% 14px 14px;
+    color: var(--cor-tinta);
+    border-radius: 50% 50% 12px 12px / 2.5rem 2.5rem 12px 12px;
     overflow: hidden;
     isolation: isolate;
+    transition: transform 0.2s ease-out;
 }
 
 .selecao-fase__arco::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.22), transparent 65%);
+    background: radial-gradient(120% 80% at 50% 0%, rgba(255, 255, 255, 0.3), transparent 60%);
     z-index: -1;
 }
 
-.selecao-fase__arco:nth-child(1) { min-height: 8rem; }
-.selecao-fase__arco:nth-child(2) { min-height: 10rem; }
-.selecao-fase__arco:nth-child(3) { min-height: 12rem; }
+.selecao-fase__arco--adolescente { background-color: var(--cor-farol); }
+.selecao-fase__arco--adulto { background-color: var(--cor-sal); }
+.selecao-fase__arco--todas { background-color: var(--cor-calor-badge); }
 
-.selecao-fase__arco:hover,
-.selecao-fase__arco:focus-visible {
-    background: linear-gradient(160deg, var(--cor-tinta) 0%, var(--cor-farol-escuro) 100%);
+.selecao-fase__arco:hover {
+    transform: translateY(-0.4rem);
 }
 
 .selecao-fase__arco:focus-visible {
-    outline: 3px solid var(--cor-farol);
+    outline: 3px solid var(--cor-papel);
     outline-offset: 3px;
 }
 
 .selecao-fase__rotulo {
     font-family: var(--fonte-display);
     font-weight: 700;
-    font-size: 1.2rem;
+    font-size: 1.35rem;
+    line-height: 1.15;
 }
 
 .selecao-fase__descricao {
-    font-size: 0.85rem;
-    color: rgba(255, 255, 255, 0.88);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* A partir de tablet: tres arcos lado a lado, nascendo da borda de baixo da
+   faixa e subindo em alturas crescentes, como uma mare. */
+@media (min-width: 36rem) {
+    .abertura__interior {
+        padding-bottom: 0;
+    }
+
+    .selecao-fase {
+        grid-template-columns: repeat(3, 1fr);
+        align-items: end;
+    }
+
+    .selecao-fase__arco {
+        border-radius: 50% 50% 0 0 / 34% 34% 0 0;
+        padding: 2rem 1rem 1.4rem;
+    }
+
+    .selecao-fase__arco--adolescente { min-height: 11rem; }
+    .selecao-fase__arco--adulto { min-height: 14rem; }
+    .selecao-fase__arco--todas { min-height: 17rem; }
+}
+
+@media (min-width: 60rem) {
+    .abertura__interior {
+        grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+        align-items: end;
+        gap: 3rem;
+        padding-top: 4.5rem;
+    }
+
+    .abertura__texto {
+        padding-bottom: 4rem;
+    }
+
+    .selecao-fase__arco--adolescente { min-height: 14rem; }
+    .selecao-fase__arco--adulto { min-height: 18rem; }
+    .selecao-fase__arco--todas { min-height: 22rem; }
+}
+
+/* Unico movimento automatico do site: a mare sobe uma vez ao abrir a home. */
+@media (prefers-reduced-motion: no-preference) {
+    .selecao-fase__arco {
+        /* "backwards" so vale antes de comecar: depois a animacao solta o
+           transform e o efeito de hover continua funcionando. */
+        animation: mare-sobe 0.75s cubic-bezier(0.2, 0.7, 0.2, 1) backwards;
+    }
+
+    .selecao-fase__arco--adulto { animation-delay: 0.09s; }
+    .selecao-fase__arco--todas { animation-delay: 0.18s; }
+}
+
+@keyframes mare-sobe {
+    from { transform: translateY(105%); }
+    to { transform: translateY(0); }
+}
+
+/* ---------- Secoes da home ---------- */
+
+.container section {
+    margin-top: 3rem;
+}
+
+.container > section:first-child {
+    margin-top: 0;
+}
+
+.cabecalho-secao {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+}
+
+.cabecalho-secao a {
+    font-weight: 600;
+    color: var(--cor-calor-texto);
+}
+
+/* Categorias como indice de leitura, nao como cards: o filete salvia separa
+   cada assunto sem disputar atencao com os conteudos logo abaixo. */
+.indice-categorias {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem 2.5rem;
+    margin-top: 1.25rem;
+}
+
+.indice-categorias li {
+    padding: 0.1rem 0 0.1rem 1rem;
+    border-left: 3px solid var(--cor-sal);
+}
+
+.indice-categorias a {
+    font-family: var(--fonte-display);
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--cor-tinta);
+    text-decoration: none;
+}
+
+.indice-categorias a:hover {
+    color: var(--cor-calor-texto);
+    text-decoration: underline;
+}
+
+.indice-categorias p {
+    margin-top: 0.2rem;
+    font-size: 0.95rem;
+}
+
+@media (min-width: 40rem) {
+    .indice-categorias {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 64rem) {
+    .indice-categorias {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+/* ---------- Paineis de servicos e duvidas ---------- */
+
+.paineis {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+.painel {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 2rem 1.75rem;
+    border-radius: var(--raio-card);
+}
+
+.painel h2 {
+    font-size: clamp(1.4rem, 1.2rem + 0.8vw, 1.85rem);
+}
+
+.painel p {
+    max-width: 30rem;
+}
+
+.painel--servicos {
+    background: #DCE6E1;
+}
+
+.painel--duvidas {
+    background: var(--cor-tinta);
+    color: var(--cor-papel);
+}
+
+.painel--duvidas h2 {
+    color: var(--cor-papel);
+}
+
+.painel__acao {
+    margin-top: auto;
+    padding: 0.65rem 1.4rem;
+    border-radius: var(--raio-pill);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.painel--servicos .painel__acao {
+    background: var(--cor-tinta);
+    color: #fff;
+}
+
+.painel--duvidas .painel__acao {
+    background: var(--cor-calor-badge);
+    color: var(--cor-tinta);
+}
+
+.painel--duvidas .painel__acao:focus-visible {
+    outline-color: var(--cor-farol);
+}
+
+@media (min-width: 48rem) {
+    .paineis {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 /* ---------- Cartões de conteúdo ---------- */
@@ -489,20 +953,57 @@ select:focus-visible {
     }
 }
 
+@media (min-width: 64rem) {
+    .cards {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    /* Em pagina de leitura (48rem) tres colunas ficariam estreitas demais. */
+    .container--leitura .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
 .cards li {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    padding: var(--espaco-medio);
+    padding: 1.1rem 1.15rem;
     border: 1px solid var(--cor-borda);
     border-radius: var(--raio-card);
     background: var(--cor-fundo-card);
-    transition: border-color 0.15s ease, transform 0.15s ease;
+    transition: border-color 0.15s ease;
 }
 
 .cards li:hover {
     border-color: var(--cor-sal);
-    transform: translateY(-2px);
+}
+
+/* Em duas colunas, destaque (2 celulas) + 7 cards deixaria o ultimo sozinho
+   na linha. Ele continua acessivel por "Ver todos os conteudos". */
+@media (min-width: 40rem) and (max-width: 63.99rem) {
+    .cards--recentes li:nth-child(8) {
+        display: none;
+    }
+}
+
+/* O conteudo mais recente ocupa duas colunas, com titulo maior. */
+@media (min-width: 40rem) {
+    .cards--recentes .cards__destaque {
+        grid-column: span 2;
+        padding: 1.6rem 1.75rem;
+        border-top: 4px solid var(--cor-tinta);
+    }
+
+    .cards--recentes .cards__destaque .cards__titulo {
+        font-size: clamp(1.4rem, 1.1rem + 1vw, 1.9rem);
+        line-height: 1.15;
+    }
+
+    .cards--recentes .cards__destaque p {
+        font-size: 1.05rem;
+        max-width: 40rem;
+    }
 }
 
 .cards__titulo {
@@ -1026,6 +1527,11 @@ select:focus-visible {
     padding: 1.5rem var(--espaco-medio);
 }
 
+/* Sem isto a regra acima alarga tambem a tela de login, que e' so um formulario curto. */
+.admin-body .container-estreito {
+    max-width: 28rem;
+}
+
 .admin-body .cards li {
     border-radius: 8px;
 }
@@ -1066,6 +1572,14 @@ select:focus-visible {
     border: 1px solid var(--cor-borda);
     border-radius: 8px;
     margin-bottom: 2rem;
+}
+
+/* Na pagina larga, os dois seletores dividem a linha em vez de ficar
+   espremidos a esquerda da caixa de busca. */
+@media (min-width: 48rem) {
+    .servicos__busca .filtros__campo:not(.filtros__campo--checkbox) {
+        flex: 1 1 16rem;
+    }
 }
 
 .filtros__campo--checkbox {

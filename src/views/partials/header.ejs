@@ -1,17 +1,41 @@
 <a class="skip-link" href="#conteudo-principal">Pular para o conteúdo principal</a>
-<%- include('barra-acessibilidade') %>
+<%
+    // caminhoAtual vem do middleware em app.js. Na vitrine estatica ele nao
+    // existe, e o menu simplesmente fica sem item marcado.
+    var caminho = locals.caminhoAtual || '';
+    function paginaAtual(prefixo) {
+        return caminho === prefixo || caminho.indexOf(prefixo + '/') === 0;
+    }
+    var itensMenu = [
+        { href: '/conteudos', prefixo: '/conteudos', rotulo: 'Conteúdos' },
+        { href: '/categorias', prefixo: '/categorias', rotulo: 'Trilhas' },
+        // Aponta direto para o quiz geral; os quizzes por categoria sao
+        // alcancados pela pagina da trilha.
+        { href: '/quiz/1', prefixo: '/quiz', rotulo: 'Quiz' },
+        { href: '/servicos', prefixo: '/servicos', rotulo: 'Serviços' },
+        { href: '/glossario', prefixo: '/glossario', rotulo: 'Glossário' },
+        { href: '/sobre', prefixo: '/sobre', rotulo: 'Sobre' },
+    ];
+%>
 <header class="site-header">
-    <a class="site-header__marca" href="/">Vida Cuida</a>
-    <nav aria-label="Navegação principal">
-        <a href="/">Início</a>
-        <a href="/conteudos">Conteúdos</a>
-        <a href="/categorias">Trilhas</a>
-        <%# Aponta direto para o quiz geral. Os quizzes por categoria são alcançados
-            pela página da trilha, depois que os artigos daquela categoria são lidos. %>
-        <a href="/quiz/1">Quiz</a>
-        <a href="/servicos">Serviços</a>
-        <a href="/duvidas">Dúvidas</a>
-        <a href="/glossario">Glossário</a>
-        <a href="/sobre">Sobre</a>
-    </nav>
+    <div class="site-header__faixa">
+        <a class="site-header__marca" href="/">Vida Cuida</a>
+
+        <button type="button" class="site-header__botao-menu" aria-expanded="false" aria-controls="menu-principal">Menu</button>
+
+        <div class="site-header__menu" id="menu-principal">
+            <nav aria-label="Navegação principal">
+                <ul class="site-header__links">
+                    <% itensMenu.forEach(function(item) { %>
+                        <li><a href="<%= item.href %>"<% if (paginaAtual(item.prefixo)) { %> aria-current="page"<% } %>><%= item.rotulo %></a></li>
+                    <% }); %>
+                    <%# O canal anonimo e' o diferencial do projeto, por isso sai da
+                        fileira comum e vira a unica acao destacada do menu. %>
+                    <li><a class="site-header__pergunta" href="/duvidas"<% if (paginaAtual('/duvidas')) { %> aria-current="page"<% } %>>Fazer uma pergunta</a></li>
+                </ul>
+            </nav>
+            <%- include('barra-acessibilidade') %>
+        </div>
+    </div>
 </header>
+<script src="/js/menu.js" defer></script>

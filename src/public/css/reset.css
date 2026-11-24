@@ -24,3 +24,9 @@ button {
     font: inherit;
     cursor: pointer;
 }
+
+/* O atributo hidden precisa vencer qualquer display definido nos componentes:
+   sem isto, .badge-lido (display: inline-flex) aparecia em todo artigo, lido ou nao. */
+[hidden] {
+    display: none !important;
+}

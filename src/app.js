@@ -64,6 +64,12 @@ app.use(
     })
 );
 
+// O cabecalho usa o caminho para marcar a pagina atual no menu (aria-current).
+app.use((req, res, next) => {
+    res.locals.caminhoAtual = req.path;
+    next();
+});
+
 app.use('/', siteRoutes);
 app.use('/admin', adminRoutes);
 app.use('/api', apiRoutes);
