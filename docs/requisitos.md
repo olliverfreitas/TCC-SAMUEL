@@ -119,7 +119,7 @@ mesma chave do `localStorage`). Ver `tests/categoria.service.test.js`.
 | RNF19 | Camada de persistência isolada em repositórios | Atendido | Todo SQL vive em `src/repositories/*.repository.js`; nenhum controller ou service executa consulta |
 | RNF20 | Base de estabelecimentos atualizável por rotina própria, sem intervenção no código | Atendido | `npm run extrair:cnes` e `npm run importar:cnes`; a aplicação não é tocada para atualizar a base |
 | RNF21 | Nenhum dado que identifique o usuário final é transmitido ou armazenado | Atendido | `schema.sql`: `duvida` guarda apenas `pergunta`, `status`, `publicada` e `criado_em`; `tentativa_quiz` grava usuário nulo nas sessões públicas; não há log de IP |
-| RNF22 | Comunicação entre cliente e servidor sobre protocolo criptografado | Parcial | O GitHub Pages serve em HTTPS; na VPS, o HTTPS via Let's Encrypt está previsto na fase de deploy e ainda não foi executado |
+| RNF22 | Comunicação entre cliente e servidor sobre protocolo criptografado | Atendido | GitHub Pages em HTTPS; na VPS, Nginx com certificado Let's Encrypt (`certbot --nginx`) e redirecionamento de HTTP para HTTPS. Ver `deploy/nginx.conf` e a seção de deploy do `README.md` |
 | RNF23 | Senhas de acesso administrativo armazenadas por função de resumo criptográfico | Atendido | `auth.service.js` (`bcrypt.compare`) e `database/seed.js` (`bcrypt.hash(..., 10)`); nunca em texto plano, nem no seed |
 | RNF24 | Envio de dúvidas limitado por sessão, prevenindo uso abusivo do canal | Atendido | `rate-limit.middleware.js#limitarPorSessao`, aplicado em `POST /duvidas`. Ver `tests/rate-limit.middleware.test.js` |
 | RNF25 | Todo conteúdo submetido pelo usuário é sanitizado antes de ser armazenado ou exibido | Atendido | `conteudo-admin.service.js` (`sanitizeHtml`, `OPCOES_SANITIZACAO`); a saída no EJS usa sempre `<%= %>`, e `<%- %>` apenas em `corpo_html` já sanitizado |
@@ -220,8 +220,10 @@ e é o que sustenta os RF24 a RF30.
   que ele mesmo manda apagar antes da entrega: afirma que o RF05 (busca textual) não está
   implementado e que o RNF14 (suíte de testes) permanece descumprido. Os dois estão
   atendidos — `/conteudos?q=` funciona e `npm test` roda 106 testes.
-- Sessão de admin usa `MemoryStore` do Express, que não sobrevive a restart do processo
-  em produção. A fase de deploy prevê `connect-sqlite3` — ainda não integrado.
-- Rate limit hoje é só por sessão (`rate-limit.middleware.js`), aplicado apenas em
-  `POST /duvidas`. `POST /admin/login` não tem proteção contra força bruta. A fase de
-  deploy prevê `express-rate-limit` — ainda não integrado.
+- Resolvido na fase de deploy: a sessão é gravada em `sessoes.sqlite` via `connect-sqlite3`
+  (sobrevive a restart do systemd), e `POST /admin/login` tem limite de 5 tentativas
+  erradas a cada 15 minutos por IP (`limite-login.middleware.js`, com
+  `express-rate-limit`). O contador fica só em memória; nenhum IP é gravado.
+- `npm audit` ainda acusa vulnerabilidades na cadeia `tar` → `node-gyp`/`node-pre-gyp`,
+  que vem de `bcrypt` e `sqlite3`. São ferramentas usadas só no `npm install` para baixar
+  ou compilar o binário nativo; não rodam com o site no ar.

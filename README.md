@@ -23,47 +23,91 @@ O servidor sobe em `http://localhost:3000` por padrão (porta configurável em `
 
 ## Deploy em VPS (Ubuntu)
 
-Pré-requisitos: um VPS Ubuntu com acesso root/sudo e um domínio apontando para o IP do servidor.
+Produção: **https://vidacuida.tech**, numa VPS Ubuntu 24.04 LTS. O código fica em
+`/var/www/plataforma` (dono `root`, só leitura para o serviço) e os bancos em
+`/var/lib/plataforma` (dono `www-data`). Separar as duas pastas garante que um
+`git pull` nunca encosta no banco de produção.
 
-1. **Instalar o Node.js LTS** (via NodeSource ou nvm) e o Nginx:
+### Instalação (uma vez)
+
+1. **Pacotes do sistema**: Node.js LTS, Nginx e compilador (`bcrypt`, `better-sqlite3` e
+   `sqlite3` são módulos nativos):
    ```bash
    curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-   sudo apt install -y nodejs nginx
+   sudo apt install -y nodejs nginx build-essential python3
    ```
 
-2. **Enviar o código pro servidor** (ex.: `git clone` ou `rsync`) em `/var/www/plataforma` e instalar as dependências de produção:
+2. **Código e dependências**:
    ```bash
+   sudo git clone https://github.com/olliverfreitas/TCC-SAMUEL.git /var/www/plataforma
    cd /var/www/plataforma
-   npm install --omit=dev
+   sudo npm ci --omit=dev
+   sudo mkdir -p /var/lib/plataforma && sudo chown www-data:www-data /var/lib/plataforma
    ```
 
-3. **Criar o `.env` de produção** em `/var/www/plataforma/.env` com `NODE_ENV=production`, `SESSION_SECRET` forte e único, `DB_PATH` apontando pra um caminho persistente, e as credenciais do admin. Rodar o seed uma única vez:
-   ```bash
-   npm run seed
+3. **`.env` de produção** em `/var/www/plataforma/.env` (permissão `600`, dono `www-data`):
    ```
+   PORT=3000
+   NODE_ENV=production
+   SESSION_SECRET=<saída de: openssl rand -hex 32>
+   DB_PATH=/var/lib/plataforma/database.sqlite
+   ADMIN_EMAIL=<e-mail do admin>
+   ADMIN_PASSWORD=<senha forte>
+   ```
+   Em produção, o app **se recusa a subir** se o `SESSION_SECRET` estiver vazio, for o valor de
+   exemplo ou tiver menos de 32 caracteres.
 
-4. **Registrar o serviço com systemd** — copie `deploy/plataforma.service` para `/etc/systemd/system/plataforma.service`, ajustando `WorkingDirectory` e `User` se necessário, depois:
+4. **Banco**, rodando como `www-data` para os arquivos já nascerem com o dono certo:
    ```bash
+   sudo -u www-data node database/seed.js
+   sudo -u www-data node database/migrar.js
+   sudo -u www-data node database/importar-cnes.js
+   ```
+   Depois do seed, apague `ADMIN_PASSWORD` do `.env`: o hash já está no banco.
+
+5. **Serviço systemd**:
+   ```bash
+   sudo cp deploy/plataforma.service /etc/systemd/system/
    sudo systemctl daemon-reload
    sudo systemctl enable --now plataforma
-   sudo systemctl status plataforma
    ```
 
-5. **Configurar o Nginx como proxy reverso** — copie `deploy/nginx.conf` para `/etc/nginx/sites-available/plataforma`, ajuste `server_name` pro seu domínio, e ative:
+6. **Nginx e HTTPS** (o domínio precisa já apontar para o IP da VPS):
    ```bash
+   sudo cp deploy/nginx.conf /etc/nginx/sites-available/plataforma
    sudo ln -s /etc/nginx/sites-available/plataforma /etc/nginx/sites-enabled/
+   sudo rm /etc/nginx/sites-enabled/default
    sudo nginx -t && sudo systemctl reload nginx
-   ```
-
-6. **Emitir o certificado HTTPS com Let's Encrypt**:
-   ```bash
    sudo apt install -y certbot python3-certbot-nginx
-   sudo certbot --nginx -d seu-dominio.com.br
+   sudo certbot --nginx -d vidacuida.tech -d www.vidacuida.tech --redirect
    ```
 
-Com `NODE_ENV=production`, a aplicação automaticamente ativa `trust proxy` e marca o cookie
-de sessão como `secure` — por isso o HTTPS via Nginx/Let's Encrypt precisa estar na frente
-antes de ativar produção, senão o cookie de sessão não é enviado pelo navegador.
+7. **Firewall**: só SSH, HTTP e HTTPS. A porta 3000 do Node fica fechada para fora.
+   ```bash
+   sudo ufw allow OpenSSH && sudo ufw allow 'Nginx Full' && sudo ufw enable
+   ```
+
+Com `NODE_ENV=production`, a aplicação ativa `trust proxy` e marca o cookie de sessão como
+`secure`. Por isso o HTTPS precisa estar na frente: sem ele, o navegador não devolve o cookie
+e o login do admin não se mantém.
+
+### Atualizar o site
+
+```bash
+cd /var/www/plataforma
+sudo cp /var/lib/plataforma/database.sqlite /var/lib/plataforma/backup-$(date +%F).sqlite
+sudo git pull
+sudo npm ci --omit=dev
+sudo -u www-data node database/migrar.js
+sudo systemctl restart plataforma
+```
+
+### Diagnóstico
+
+- Logs da aplicação: `sudo journalctl -u plataforma -f`
+- Estado do serviço: `sudo systemctl status plataforma`
+- Configuração do Nginx: `sudo nginx -t`
+- Renovação do certificado (automática, via timer do certbot): `sudo certbot renew --dry-run`
 
 ## Unidades de saúde (CNES)
 

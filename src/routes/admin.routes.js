@@ -5,11 +5,12 @@ const adminController = require('../controllers/admin.controller');
 const quizAdminController = require('../controllers/quiz-admin.controller');
 const duvidaAdminController = require('../controllers/duvida-admin.controller');
 const { requireAuth, requireRole } = require('../middlewares/auth.middleware');
+const { limitarLoginPorIp } = require('../middlewares/limite-login.middleware');
 
 const router = express.Router();
 
 router.get('/login', authController.exibirLogin);
-router.post('/login', authController.login);
+router.post('/login', limitarLoginPorIp(), authController.login);
 router.post('/logout', authController.logout);
 
 router.use(requireAuth, requireRole('admin', 'editor'));

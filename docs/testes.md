@@ -53,6 +53,7 @@ Saída esperada (resumo): `24 tests`, `24 pass`, `0 fail`.
 | `auth.middleware.test.js` | **Segurança (controle de acesso)** | Rota admin redireciona sem sessão; papel fora da lista permitida recebe 403 |
 | `conteudo-admin.service.test.js` | **Segurança (integridade)** + **Funcionalidade** | `<script>` e outras tags não permitidas são removidas do corpo do conteúdo antes de gravar (RNF25); dois conteúdos com o mesmo título geram slugs distintos (evita colisão de URL) |
 | `rate-limit.middleware.test.js` | **Confiabilidade (tolerância a falhas/abuso)** | O limite de tentativas por sessão realmente bloqueia depois do Nº configurado e libera depois que a janela de tempo expira (RNF24) |
+| `limite-login.middleware.test.js` | **Segurança (resistência a força bruta)** | Depois de N senhas erradas o login responde 429 — inclusive para a senha certa, senão o atacante continuaria testando; login certo não consome tentativa |
 | `categoria.service.test.js` | **Funcionalidade (correção)** | A trilha lista só os artigos **publicados** daquela categoria, na ordem de leitura (mais antigo primeiro), e devolve o quiz correto — ou `null` quando a categoria ainda não tem quiz (RF01 e RF14) |
 | `quiz-admin.service.test.js` | **Funcionalidade (integridade referencial)** | O vínculo questão→artigo é gravado e trocado corretamente na edição, e o admin só pode vincular artigos **da categoria daquele quiz**, nunca de outro assunto — recurso da Sprint 7, sem RF próprio |
 

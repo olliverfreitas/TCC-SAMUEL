@@ -4,3 +4,4 @@ database/database.sqlite
 *.log
 .claude/
 dist-estatico/
+database/sessoes.sqlite
