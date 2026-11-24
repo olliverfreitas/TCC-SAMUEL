@@ -66,14 +66,14 @@ provam à banca que o sistema entrega o que promete).
 | Qualidade de código sustentável para 2 alunos manterem | Cobertura de teste automatizado nos services críticos de segurança | 6 suítes, 24 testes, focados em auth/quiz/dúvida/rate-limit (`docs/testes.md`) |
 | Segurança de dados sensíveis | Nenhuma tabela com dado de saúde do usuário; senha sempre com hash | Verificado no schema (`RNF23`, `RNF21`) |
 | Portabilidade dev → produção sem retrabalho | Zero caminho absoluto hardcoded | Verificado — garantia técnica do projeto, ver `docs/requisitos.md` — todo caminho via `.env`/`path.join` |
-| Continuidade do serviço | Processo gerenciado por systemd com reinício automático em falha | `deploy/plataforma.service` (`Restart=always`, a confirmar no arquivo antes do deploy real) |
+| Continuidade do serviço | Processo gerenciado por systemd com reinício automático em falha | `deploy/plataforma.service` (`Restart=always`) |
 
 ### Matriz de risco
 
 | Risco | Probabilidade | Impacto | Mitigação |
 |---|---|---|---|
-| Sessão de admin em `MemoryStore` some a cada restart do processo em produção | Média | Baixo (só afeta admin, não visitante) | Trocar por `connect-sqlite3` (já na lista de dependências aprovadas para deploy) antes de ir a produção real |
-| `POST /admin/login` sem limite de tentativas — força bruta possível | Baixa (site pequeno, sem valor de ataque óbvio) | Médio (comprometeria o único papel privilegiado) | Aplicar `express-rate-limit` (já aprovado para a fase de deploy) nessa rota especificamente |
+| ~~Sessão de admin em `MemoryStore` some a cada restart do processo em produção~~ | ~~Média~~ | ~~Baixo~~ | **Mitigado no deploy**: sessões em `sessoes.sqlite` via `connect-sqlite3` |
+| ~~`POST /admin/login` sem limite de tentativas — força bruta possível~~ | ~~Baixa~~ | ~~Médio~~ | **Mitigado no deploy**: `limite-login.middleware.js` (`express-rate-limit`), 5 tentativas erradas a cada 15 min por IP |
 | Conteúdo de saúde sensível publicado sem fonte oficial por erro humano no admin | Baixa | Alto (credibilidade do projeto) | Campo `fontes` obrigatório no banco (RF03) — risco já mitigado estruturalmente, não depende de disciplina do editor |
 | Dúvida anônima usada para abuso/spam | Média | Baixo | Filtro de conteúdo bloqueado + rate limit por sessão (RF17 e RNF24), já implementados e testados |
 | Perda de dado por rodar `npm run seed` em produção sem perceber que recria tabelas | Baixa | Alto (perda de conteúdo real) | Seed é idempotente e verifica `tabelaVazia()` antes de inserir (não sobrescreve dado existente) — mas backup antes de qualquer operação de banco em produção continua sendo prática recomendada |
